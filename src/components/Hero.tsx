@@ -1,13 +1,8 @@
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
@@ -41,35 +36,24 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
             <Button
               size="lg"
-              onClick={() => scrollToSection("#servicios")}
+              asChild
               className="gradient-primary hover-glow text-base sm:text-lg h-12 sm:h-14 px-8"
             >
-              Ver Servicios
-              <ArrowRight className="ml-2" size={20} />
+              <Link to="/servicios">
+                Ver Servicios
+                <ArrowRight className="ml-2" size={20} />
+              </Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
-              onClick={() => scrollToSection("#portafolio")}
+              asChild
               className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base sm:text-lg h-12 sm:h-14 px-8"
             >
-              Ver Plantillas
+              <Link to="/portafolio">
+                Ver Plantillas
+              </Link>
             </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in" style={{ animationDelay: "0.6s" }}>
-            {[
-              { value: "500+", label: "Proyectos" },
-              { value: "200+", label: "Clientes" },
-              { value: "15+", label: "Años" },
-              { value: "98%", label: "Satisfacción" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-primary mb-2">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

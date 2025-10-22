@@ -1,15 +1,16 @@
 import { Linkedin, Twitter, Facebook, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { label: "Inicio", href: "#inicio" },
-    { label: "Servicios", href: "#servicios" },
-    { label: "Portafolio", href: "#portafolio" },
-    { label: "Sobre Nosotros", href: "#nosotros" },
-    { label: "Contacto", href: "#contacto" },
+    { label: "Inicio", href: "/" },
+    { label: "Servicios", href: "/servicios" },
+    { label: "Portafolio", href: "/portafolio" },
+    { label: "Sobre Nosotros", href: "/nosotros" },
+    { label: "Contacto", href: "/contacto" },
   ];
 
   const services = [
@@ -26,20 +27,15 @@ const Footer = () => {
     { icon: Mail, href: "mailto:contacto@datodirecto.com", label: "Email" },
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <footer className="bg-secondary/30 border-t border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div>
-            <img src={logo} alt="DatoDirecto" className="h-12 w-auto mb-4" />
+            <Link to="/">
+              <img src={logo} alt="DatoDirecto" className="h-12 w-auto mb-4" />
+            </Link>
             <p className="text-sm text-muted-foreground mb-4">
               Transformando datos en decisiones inteligentes desde 2010.
             </p>
@@ -63,16 +59,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(link.href);
-                    }}
+                  <Link
+                    to={link.href}
                     className="text-sm text-muted-foreground hover:text-primary transition-smooth"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

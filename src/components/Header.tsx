@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,20 +18,12 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { label: "Inicio", href: "#inicio" },
-    { label: "Servicios", href: "#servicios" },
-    { label: "Portafolio", href: "#portafolio" },
-    { label: "Sobre Nosotros", href: "#nosotros" },
-    { label: "Contacto", href: "#contacto" },
+    { label: "Inicio", href: "/" },
+    { label: "Servicios", href: "/servicios" },
+    { label: "Portafolio", href: "/portafolio" },
+    { label: "Sobre Nosotros", href: "/nosotros" },
+    { label: "Contacto", href: "/contacto" },
   ];
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   return (
     <header
@@ -41,33 +35,28 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <a href="#inicio" className="flex items-center" onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("#inicio");
-          }}>
+          <Link to="/" className="flex items-center">
             <img src={logo} alt="DatoDirecto" className="h-12 w-auto" />
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.href);
-                }}
-                className="text-foreground/80 hover:text-primary transition-smooth font-medium"
+                to={item.href}
+                className={`text-foreground/80 hover:text-primary transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-primary" : ""
+                }`}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             <Button
-              onClick={() => scrollToSection("#contacto")}
+              asChild
               className="gradient-primary hover-glow"
             >
-              Contactar
+              <Link to="/contacto">Contactar</Link>
             </Button>
           </nav>
 
@@ -85,23 +74,24 @@ const Header = () => {
         {isMobileMenuOpen && (
           <nav className="md:hidden py-4 animate-fade-in">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.href);
-                }}
-                className="block py-3 text-foreground/80 hover:text-primary transition-smooth font-medium"
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block py-3 text-foreground/80 hover:text-primary transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-primary" : ""
+                }`}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             <Button
-              onClick={() => scrollToSection("#contacto")}
+              asChild
               className="w-full mt-4 gradient-primary"
             >
-              Contactar
+              <Link to="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
+                Contactar
+              </Link>
             </Button>
           </nav>
         )}
