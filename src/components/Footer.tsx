@@ -1,6 +1,7 @@
-import { Linkedin, Twitter, Facebook, Mail } from "lucide-react";
+import { Linkedin, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import { FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -22,13 +23,12 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Mail, href: "mailto:contacto@datodirecto.com", label: "Email" },
+    { icon: FaTiktok, href: "#", label: "TikTok" },
+    { icon: Instagram, href: "#", label: "Instagram" },
   ];
 
   return (
-    <footer className="bg-secondary/30 border-t border-border">
+    <footer className="bg-[#2737A0] border-t border-white/10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
@@ -36,7 +36,7 @@ const Footer = () => {
             <Link to="/">
               <img src={logo} alt="DatoDirecto" className="h-12 w-auto mb-4" />
             </Link>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-white/70 mb-4">
               Transformando datos en decisiones inteligentes desde 2010.
             </p>
             <div className="flex gap-3">
@@ -45,7 +45,7 @@ const Footer = () => {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-background hover:bg-primary hover:text-white flex items-center justify-center transition-smooth"
+                  className="w-10 h-10 rounded-lg bg-white/10 hover:bg-[#52B8D8] hover:text-white flex items-center justify-center transition-smooth text-white/80"
                 >
                   <social.icon size={18} />
                 </a>
@@ -55,13 +55,13 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold mb-4">Enlaces Rápidos</h3>
+            <h3 className="font-semibold mb-4 text-white">Enlaces Rápidos</h3>
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-smooth"
+                    className="text-sm text-white/70 hover:text-[#52B8D8] transition-smooth"
                   >
                     {link.label}
                   </Link>
@@ -72,11 +72,11 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold mb-4">Servicios</h3>
+            <h3 className="font-semibold mb-4 text-white">Servicios</h3>
             <ul className="space-y-2">
               {services.map((service, index) => (
                 <li key={index}>
-                  <span className="text-sm text-muted-foreground">{service}</span>
+                  <span className="text-sm text-white/70">{service}</span>
                 </li>
               ))}
             </ul>
@@ -84,15 +84,15 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold mb-4">Contacto</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <h3 className="font-semibold mb-4 text-white">Contacto</h3>
+            <ul className="space-y-2 text-sm text-white/70">
               <li>
-                <a href="mailto:contacto@datodirecto.com" className="hover:text-primary transition-smooth">
+                <a href="mailto:contacto@datodirecto.com" className="hover:text-[#52B8D8] transition-smooth">
                   contacto@datodirecto.com
                 </a>
               </li>
               <li>
-                <a href="tel:+525512345678" className="hover:text-primary transition-smooth">
+                <a href="tel:+525512345678" className="hover:text-[#52B8D8] transition-smooth">
                   +52 (55) 1234-5678
                 </a>
               </li>
@@ -102,16 +102,16 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border">
+        <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground text-center md:text-left">
+            <p className="text-sm text-white/70 text-center md:text-left">
               © {currentYear} DatoDirecto. Todos los derechos reservados.
             </p>
-            <div className="flex gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-smooth">
+            <div className="flex gap-6 text-sm text-white/70">
+              <a href="#" className="hover:text-[#52B8D8] transition-smooth">
                 Política de Privacidad
               </a>
-              <a href="#" className="hover:text-primary transition-smooth">
+              <a href="#" className="hover:text-[#52B8D8] transition-smooth">
                 Términos de Servicio
               </a>
             </div>

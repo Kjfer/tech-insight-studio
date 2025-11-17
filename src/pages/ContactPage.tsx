@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, Linkedin, Twitter, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Linkedin, Instagram } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -63,8 +64,8 @@ const ContactPage = () => {
 
   const socialLinks = [
     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: FaTiktok, href: "#", label: "TikTok" },
+    { icon: Instagram, href: "#", label: "Instagram" },
   ];
 
   return (
