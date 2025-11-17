@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileSpreadsheet, Code2, BarChart3, Eye, Download } from "lucide-react";
+import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Portfolio = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
@@ -147,9 +148,18 @@ const Portfolio = () => {
                       <Eye size={16} className="mr-2" />
                       Ver Demo
                     </Button>
-                    <Button className="flex-1 gradient-primary">
-                      <Download size={16} className="mr-2" />
-                      Obtener
+                    <Button 
+                      className="flex-1 bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                      asChild
+                    >
+                      <a
+                        href={`https://wa.me/51993439301?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${template.title}". ¿Podrían brindarme más información?`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle size={16} className="mr-2" />
+                        Consultar Plantilla
+                      </a>
                     </Button>
                   </CardFooter>
                 </Card>
@@ -188,9 +198,18 @@ const Portfolio = () => {
                   <Button variant="outline" className="flex-1" onClick={() => setSelectedTemplate(null)}>
                     Cerrar
                   </Button>
-                  <Button className="flex-1 gradient-primary">
-                    <Download size={16} className="mr-2" />
-                    Descargar Plantilla
+                  <Button 
+                    className="flex-1 bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                    asChild
+                  >
+                    <a
+                      href={`https://wa.me/51993439301?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${selectedTemplate?.title}". ¿Podrían brindarme más información?`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle size={16} className="mr-2" />
+                      Consultar Plantilla
+                    </a>
                   </Button>
                 </div>
               </DialogContent>
@@ -199,6 +218,7 @@ const Portfolio = () => {
         </section>
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };

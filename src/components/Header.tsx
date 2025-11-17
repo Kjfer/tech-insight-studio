@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Linkedin, Instagram } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
-import { FaTiktok } from "react-icons/fa";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,29 +56,6 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
-            <div className="flex items-center gap-3">
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="text-white/80 hover:text-[#52B8D8] transition-smooth"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="#"
-                aria-label="TikTok"
-                className="text-white/80 hover:text-[#52B8D8] transition-smooth"
-              >
-                <FaTiktok size={20} />
-              </a>
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="text-white/80 hover:text-[#52B8D8] transition-smooth"
-              >
-                <Instagram size={20} />
-              </a>
-            </div>
             <Button
               asChild
               className="bg-[#52B8D8] hover:bg-[#3da3c8] text-white"
