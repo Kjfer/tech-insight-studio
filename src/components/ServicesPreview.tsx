@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, FileSpreadsheet, Code, Lightbulb } from "lucide-react";
+import consultingImg from "@/assets/service-consulting.jpg";
+import excelImg from "@/assets/service-excel.jpg";
+import pythonImg from "@/assets/service-python.jpg";
+import powerbiImg from "@/assets/service-powerbi.jpg";
 
 const ServicesPreview = () => {
   const services = [
@@ -9,21 +13,25 @@ const ServicesPreview = () => {
       icon: Lightbulb,
       title: "Asesoría Tecnológica",
       description: "Consultoría estratégica en implementación de soluciones tecnológicas",
+      image: consultingImg,
     },
     {
       icon: BarChart3,
       title: "Business Intelligence",
       description: "Sistemas de análisis y visualización de datos personalizados",
+      image: powerbiImg,
     },
     {
       icon: Code,
       title: "Desarrollo Web",
       description: "Soluciones integrales para control y gestión empresarial",
+      image: pythonImg,
     },
     {
       icon: FileSpreadsheet,
       title: "Automatización",
       description: "Optimización de procesos mediante herramientas especializadas",
+      image: excelImg,
     },
   ];
 
@@ -39,11 +47,19 @@ const ServicesPreview = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {services.map((service, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                  <service.icon className="w-6 h-6 text-primary" />
+            <Card key={index} className="hover:shadow-lg transition-shadow overflow-hidden group">
+              <div className="relative h-40 overflow-hidden">
+                <img 
+                  src={service.image} 
+                  alt={service.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                <div className="absolute bottom-3 left-3 w-10 h-10 bg-primary/90 rounded-lg flex items-center justify-center">
+                  <service.icon className="w-5 h-5 text-white" />
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-xl">{service.title}</CardTitle>
               </CardHeader>
               <CardContent>
