@@ -14,16 +14,362 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      about_us: {
+        Row: {
+          history: string
+          id: string
+          mission: string
+          updated_at: string | null
+          vision: string
+        }
+        Insert: {
+          history: string
+          id?: string
+          mission: string
+          updated_at?: string | null
+          vision: string
+        }
+        Update: {
+          history?: string
+          id?: string
+          mission?: string
+          updated_at?: string | null
+          vision?: string
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          created_at: string | null
+          id: string
+          logo_url: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          logo_url: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          logo_url?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      hero_slides: {
+        Row: {
+          created_at: string | null
+          description: string
+          highlight: string
+          id: string
+          image_url: string
+          order_index: number
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          highlight: string
+          id?: string
+          image_url: string
+          order_index: number
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          highlight?: string
+          id?: string
+          image_url?: string
+          order_index?: number
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      keywords: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      service_keywords: {
+        Row: {
+          id: string
+          keyword_id: string
+          service_id: string
+        }
+        Insert: {
+          id?: string
+          keyword_id: string
+          service_id: string
+        }
+        Update: {
+          id?: string
+          keyword_id?: string
+          service_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_keywords_keyword_id_fkey"
+            columns: ["keyword_id"]
+            isOneToOne: false
+            referencedRelation: "keywords"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_keywords_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          created_at: string | null
+          description: string
+          icon: string
+          id: string
+          image_url: string
+          show_in_home: boolean | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          icon: string
+          id?: string
+          image_url: string
+          show_in_home?: boolean | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          image_url?: string
+          show_in_home?: boolean | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          image_url: string | null
+          name: string
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          image_url?: string | null
+          name: string
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      template_categories: {
+        Row: {
+          created_at: string | null
+          icon: string
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          icon: string
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          icon?: string
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      template_keywords: {
+        Row: {
+          id: string
+          keyword_id: string
+          template_id: string
+        }
+        Insert: {
+          id?: string
+          keyword_id: string
+          template_id: string
+        }
+        Update: {
+          id?: string
+          keyword_id?: string
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "template_keywords_keyword_id_fkey"
+            columns: ["keyword_id"]
+            isOneToOne: false
+            referencedRelation: "keywords"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "template_keywords_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      templates: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          description: string
+          id: string
+          image_url: string | null
+          is_featured: boolean | null
+          price: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          price?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          price?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templates_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "template_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      values: {
+        Row: {
+          created_at: string | null
+          description: string
+          icon: string
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          icon: string
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +496,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
