@@ -29,8 +29,8 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${
         isScrolled
-          ? "bg-[#1e3a5f]/95 backdrop-blur-md shadow-elegant"
-          : "bg-[#1e3a5f]"
+          ? "bg-[#2E3B9F]/95 backdrop-blur-md shadow-elegant"
+          : "bg-[#2E3B9F]"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,8 +38,8 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="DatoDirecto" className="h-12 w-auto" />
             <span className="text-2xl font-bold tracking-tight">
-              <span className="text-[#3498db]">DATO</span>
-              <span className="text-[#e74c3c]">DIRECTO</span>
+              <span className="text-[#FFFFFF]">DATO</span>
+              <span className="text-[#52B8D8]">DIRECTO</span>
             </span>
           </Link>
 
@@ -49,8 +49,8 @@ const Header = () => {
               <Link
                 key={item.label}
                 to={item.href}
-                className={`text-white/90 hover:text-[#3498db] transition-smooth font-medium ${
-                  location.pathname === item.href ? "text-[#3498db]" : ""
+                className={`text-white/90 hover:text-[#52B8D8] transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-[#52B8D8]" : ""
                 }`}
               >
                 {item.label}
@@ -58,7 +58,7 @@ const Header = () => {
             ))}
             <Button
               asChild
-              className="bg-[#3498db] hover:bg-[#2980b9] text-white"
+              className="bg-[#52B8D8] hover:bg-[#3da3c8] text-white"
             >
               <Link to="/contacto">Contactar</Link>
             </Button>
@@ -76,14 +76,14 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden py-4 animate-fade-in bg-[#1e3a5f]">
+          <nav className="md:hidden py-4 animate-fade-in bg-[#2E3B9F]">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 to={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block py-3 text-white/90 hover:text-[#3498db] transition-smooth font-medium ${
-                  location.pathname === item.href ? "text-[#3498db]" : ""
+                className={`block py-3 text-white/90 hover:text-[#52B8D8] transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-[#52B8D8]" : ""
                 }`}
               >
                 {item.label}
@@ -91,7 +91,7 @@ const Header = () => {
             ))}
             <Button
               asChild
-              className="w-full mt-4 bg-[#3498db] hover:bg-[#2980b9] text-white"
+              className="w-full mt-4 bg-[#52B8D8] hover:bg-[#3da3c8] text-white"
             >
               <Link to="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
                 Contactar
