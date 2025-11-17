@@ -1,23 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useClients } from "@/hooks/useSupabaseData";
 
 const Clients = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Placeholder client logos (using initials)
-  const clients = [
-    { name: "Microsoft", initials: "MS" },
-    { name: "Amazon", initials: "AZ" },
-    { name: "Google", initials: "GG" },
-    { name: "IBM", initials: "IBM" },
-    { name: "Oracle", initials: "OR" },
-    { name: "SAP", initials: "SAP" },
-    { name: "Adobe", initials: "AD" },
-    { name: "Cisco", initials: "CS" },
-    { name: "Intel", initials: "IN" },
-    { name: "Dell", initials: "DL" },
-    { name: "HP", initials: "HP" },
-    { name: "Samsung", initials: "SS" },
-  ];
+  const { clients = [], loading: isLoading } = useClients();
 
   // Duplicate for seamless loop
   const duplicatedClients = [...clients, ...clients];
@@ -50,6 +36,10 @@ const Clients = () => {
     };
   }, []);
 
+  if (isLoading || clients.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-16 bg-secondary/30 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,13 +60,15 @@ const Clients = () => {
           >
             {duplicatedClients.map((client, index) => (
               <div
-                key={index}
+                key={`${client.id}-${index}`}
                 className="flex-shrink-0 w-32 h-24 flex items-center justify-center group cursor-pointer"
               >
-                <div className="w-full h-full flex items-center justify-center rounded-xl bg-background border-2 border-border transition-smooth group-hover:border-primary group-hover:shadow-elegant">
-                  <span className="text-2xl font-bold text-muted-foreground group-hover:text-primary transition-smooth">
-                    {client.initials}
-                  </span>
+                <div className="w-full h-full flex items-center justify-center rounded-xl bg-background border-2 border-border transition-smooth group-hover:border-primary group-hover:shadow-elegant overflow-hidden">
+                  <img 
+                    src={client.logo_url} 
+                    alt={client.name}
+                    className="w-full h-full object-contain p-4"
+                  />
                 </div>
               </div>
             ))}

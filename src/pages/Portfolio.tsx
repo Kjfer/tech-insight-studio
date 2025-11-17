@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle } from "lucide-react";
+import { useState, useMemo } from "react";
+import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle, Search } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -13,73 +14,50 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { useTemplates, useCategories } from "@/hooks/useSupabaseData";
 
 const Portfolio = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [activeFilter, setActiveFilter] = useState("Todos");
+  const [keywordSearch, setKeywordSearch] = useState("");
+  
+  const { templates = [], loading: templatesLoading } = useTemplates();
+  const { categories = [], loading: categoriesLoading } = useCategories();
 
-  const templates = [
-    {
-      id: 1,
-      title: "Dashboard Financiero",
-      category: "Excel",
-      description: "Control financiero completo con KPIs, análisis de flujo de caja y proyecciones",
-      features: ["Análisis P&L", "Flujo de caja", "Gráficos dinámicos", "Proyecciones"],
-      icon: FileSpreadsheet,
-      color: "text-green-600",
-    },
-    {
-      id: 2,
-      title: "Análisis de Ventas",
-      category: "Power BI",
-      description: "Dashboard interactivo para análisis de ventas, clientes y tendencias de mercado",
-      features: ["Métricas de ventas", "Segmentación", "Análisis temporal", "Mapas"],
-      icon: BarChart3,
-      color: "text-yellow-600",
-    },
-    {
-      id: 3,
-      title: "Automatización RPA",
-      category: "Python",
-      description: "Scripts para automatización de procesos repetitivos y extracción de datos",
-      features: ["Web scraping", "Automatización", "Procesamiento", "Reportes"],
-      icon: Code2,
-      color: "text-blue-600",
-    },
-    {
-      id: 4,
-      title: "Control de Inventario",
-      category: "Excel",
-      description: "Sistema completo de gestión de inventario con alertas y reorden automático",
-      features: ["Stock mínimo", "Alertas", "Historial", "Reportes"],
-      icon: FileSpreadsheet,
-      color: "text-green-600",
-    },
-    {
-      id: 5,
-      title: "Análisis Predictivo",
-      category: "Python",
-      description: "Modelos de machine learning para predicción de ventas y tendencias",
-      features: ["ML models", "Predicciones", "Visualización", "API"],
-      icon: Code2,
-      color: "text-blue-600",
-    },
-    {
-      id: 6,
-      title: "Dashboard Ejecutivo",
-      category: "Power BI",
-      description: "Panel ejecutivo con KPIs principales y análisis de desempeño empresarial",
-      features: ["KPIs", "Tendencias", "Benchmarking", "Drill-down"],
-      icon: BarChart3,
-      color: "text-yellow-600",
-    },
-  ];
+  const categoryIcons: Record<string, any> = {
+    "Excel": FileSpreadsheet,
+    "Python": Code2,
+    "Power BI": BarChart3,
+  };
 
-  const filters = ["Todos", "Excel", "Python", "Power BI"];
+  const categoryColors: Record<string, string> = {
+    "Excel": "text-green-600",
+    "Python": "text-blue-600",
+    "Power BI": "text-yellow-600",
+  };
 
-  const filteredTemplates = activeFilter === "Todos"
-    ? templates
-    : templates.filter((t) => t.category === activeFilter);
+  const filters = ["Todos", ...categories.map(c => c.name)];
+
+  const filteredTemplates = useMemo(() => {
+    let result = templates;
+
+    // Filter by category
+    if (activeFilter !== "Todos") {
+      result = result.filter((t) => t.category?.name === activeFilter);
+    }
+
+    // Filter by keyword search
+    if (keywordSearch.trim()) {
+      const searchLower = keywordSearch.toLowerCase();
+      result = result.filter((t) => 
+        t.title.toLowerCase().includes(searchLower) ||
+        t.description.toLowerCase().includes(searchLower) ||
+        t.keywords?.some((k: any) => k.keyword?.name.toLowerCase().includes(searchLower))
+      );
+    }
+
+    return result;
+  }, [templates, activeFilter, keywordSearch]);
 
   return (
     <div className="min-h-screen">
@@ -94,6 +72,20 @@ const Portfolio = () => {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
                 Plantillas profesionales probadas y optimizadas para diferentes necesidades empresariales
               </p>
+
+              {/* Keyword Search */}
+              <div className="max-w-md mx-auto mb-8">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Input
+                    type="text"
+                    placeholder="Buscar por palabras clave..."
+                    value={keywordSearch}
+                    onChange={(e) => setKeywordSearch(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
 
               {/* Filters */}
               <div className="flex flex-wrap justify-center gap-3">
@@ -110,110 +102,158 @@ const Portfolio = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTemplates.map((template) => (
-                <Card key={template.id} className="hover-lift overflow-hidden group">
-                  <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
-                    <template.icon size={64} className={`${template.color} group-hover:scale-110 transition-smooth`} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
-                  </div>
+            {/* Templates Grid */}
+            {templatesLoading || categoriesLoading ? (
+              <div className="text-center mt-12">
+                <p className="text-muted-foreground">Cargando plantillas...</p>
+              </div>
+            ) : filteredTemplates.length === 0 ? (
+              <div className="text-center mt-12">
+                <p className="text-muted-foreground">No se encontraron plantillas con los filtros seleccionados.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredTemplates.map((template) => {
+                  const Icon = categoryIcons[template.category?.name || ""] || FileSpreadsheet;
+                  const color = categoryColors[template.category?.name || ""] || "text-gray-600";
                   
-                  <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge variant="secondary">{template.category}</Badge>
-                    </div>
-                    <CardTitle className="text-xl">{template.title}</CardTitle>
-                    <CardDescription>{template.description}</CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {template.features.slice(0, 3).map((feature, idx) => (
-                        <span
-                          key={idx}
-                          className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground"
+                  return (
+                    <Card key={template.id} className="hover-lift overflow-hidden group">
+                      <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
+                        <Icon size={64} className={`${color} group-hover:scale-110 transition-smooth`} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
+                      </div>
+                      
+                      <CardHeader>
+                        <div className="flex items-start justify-between mb-2">
+                          <Badge variant="secondary">{template.category?.name}</Badge>
+                          {template.price && (
+                            <span className="text-xl font-bold text-primary">${template.price}</span>
+                          )}
+                        </div>
+                        <CardTitle className="text-xl">{template.title}</CardTitle>
+                        <CardDescription>{template.description}</CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                          {template.keywords?.slice(0, 3).map((kw: any) => (
+                            <span
+                              key={kw.keyword.id}
+                              className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground"
+                            >
+                              {kw.keyword.name}
+                            </span>
+                          ))}
+                        </div>
+                      </CardContent>
+                      
+                      <CardFooter className="gap-2">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => setSelectedTemplate(template)}
                         >
-                          {feature}
-                        </span>
-                      ))}
+                          <Eye size={16} className="mr-2" />
+                          Ver más
+                        </Button>
+                        <Button 
+                          className="flex-1 bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                          asChild
+                        >
+                          <a
+                            href={`https://wa.me/593998765432?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${template.title}". ¿Podrían brindarme más información?`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <MessageCircle size={16} className="mr-2" />
+                            Contactar
+                          </a>
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Template Detail Modal */}
+            {selectedTemplate && (
+              <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null)}>
+                <DialogContent className="max-w-3xl">
+                  <DialogHeader>
+                    <div className="flex items-center gap-3 mb-4">
+                      {(() => {
+                        const Icon = categoryIcons[selectedTemplate.category?.name || ""] || FileSpreadsheet;
+                        const color = categoryColors[selectedTemplate.category?.name || ""] || "text-gray-600";
+                        return (
+                          <>
+                            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                              <Icon className={`w-6 h-6 ${color}`} />
+                            </div>
+                            <Badge variant="secondary">{selectedTemplate.category?.name}</Badge>
+                            {selectedTemplate.price && (
+                              <span className="ml-auto text-2xl font-bold text-primary">${selectedTemplate.price}</span>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
-                  </CardContent>
+                    <DialogTitle className="text-2xl">{selectedTemplate.title}</DialogTitle>
+                    <DialogDescription className="text-base">
+                      {selectedTemplate.description}
+                    </DialogDescription>
+                  </DialogHeader>
                   
-                  <CardFooter className="gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => setSelectedTemplate(template)}
-                    >
-                      <Eye size={16} className="mr-2" />
-                      Ver Demo
+                  <div className="mt-4">
+                    {selectedTemplate.image_url && (
+                      <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
+                        <img 
+                          src={selectedTemplate.image_url} 
+                          alt={selectedTemplate.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    
+                    <h4 className="font-semibold mb-3">Características principales:</h4>
+                    <ul className="grid grid-cols-2 gap-3">
+                      {selectedTemplate.keywords?.map((kw: any) => (
+                        <li key={kw.keyword.id} className="flex items-center text-sm">
+                          <span className="w-2 h-2 rounded-full bg-primary mr-2" />
+                          {kw.keyword.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-6 p-6 bg-secondary/50 rounded-lg">
+                    <p className="text-sm text-muted-foreground text-center">
+                      Vista previa del dashboard - Funcionalidad completa disponible en la versión descargable
+                    </p>
+                  </div>
+
+                  <div className="flex gap-3 mt-4">
+                    <Button variant="outline" className="flex-1" onClick={() => setSelectedTemplate(null)}>
+                      Cerrar
                     </Button>
                     <Button 
                       className="flex-1 bg-[#25D366] hover:bg-[#20BA5A] text-white"
                       asChild
                     >
                       <a
-                        href={`https://wa.me/51993439301?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${template.title}". ¿Podrían brindarme más información?`)}`}
+                        href={`https://wa.me/593998765432?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${selectedTemplate.title}". ¿Podrían brindarme más información?`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <MessageCircle size={16} className="mr-2" />
-                        Consultar Plantilla
+                        Contactar por WhatsApp
                       </a>
                     </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-
-            {/* Template Detail Modal */}
-            <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null)}>
-              <DialogContent className="max-w-3xl">
-                <DialogHeader>
-                  <DialogTitle className="text-2xl">{selectedTemplate?.title}</DialogTitle>
-                  <DialogDescription className="text-base">
-                    {selectedTemplate?.description}
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <div className="mt-4">
-                  <h4 className="font-semibold mb-3">Características principales:</h4>
-                  <ul className="grid grid-cols-2 gap-3">
-                    {selectedTemplate?.features.map((feature: string, idx: number) => (
-                      <li key={idx} className="flex items-center text-sm">
-                        <span className="w-2 h-2 rounded-full bg-primary mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-6 p-6 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground text-center">
-                    Vista previa del dashboard - Funcionalidad completa disponible en la versión descargable
-                  </p>
-                </div>
-
-                <div className="flex gap-3 mt-4">
-                  <Button variant="outline" className="flex-1" onClick={() => setSelectedTemplate(null)}>
-                    Cerrar
-                  </Button>
-                  <Button 
-                    className="flex-1 bg-[#25D366] hover:bg-[#20BA5A] text-white"
-                    asChild
-                  >
-                    <a
-                      href={`https://wa.me/51993439301?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${selectedTemplate?.title}". ¿Podrían brindarme más información?`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <MessageCircle size={16} className="mr-2" />
-                      Consultar Plantilla
-                    </a>
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
         </section>
       </main>
