@@ -29,14 +29,18 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${
         isScrolled
-          ? "bg-background/95 backdrop-blur-md shadow-elegant"
-          : "bg-transparent"
+          ? "bg-[#1a2332]/95 backdrop-blur-md shadow-elegant"
+          : "bg-[#1a2332]"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="DatoDirecto" className="h-12 w-auto" />
+            <span className="text-2xl font-bold">
+              <span className="text-[#4A90E2]">DATO</span>
+              <span className="text-[#E74C3C]">DIRECTO</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -45,8 +49,8 @@ const Header = () => {
               <Link
                 key={item.label}
                 to={item.href}
-                className={`text-foreground/80 hover:text-primary transition-smooth font-medium ${
-                  location.pathname === item.href ? "text-primary" : ""
+                className={`text-white/90 hover:text-[#4A90E2] transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-[#4A90E2]" : ""
                 }`}
               >
                 {item.label}
@@ -54,7 +58,7 @@ const Header = () => {
             ))}
             <Button
               asChild
-              className="gradient-primary hover-glow"
+              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white"
             >
               <Link to="/contacto">Contactar</Link>
             </Button>
@@ -62,7 +66,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-foreground"
+            className="md:hidden text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -72,14 +76,14 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden py-4 animate-fade-in">
+          <nav className="md:hidden py-4 animate-fade-in bg-[#1a2332]">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 to={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block py-3 text-foreground/80 hover:text-primary transition-smooth font-medium ${
-                  location.pathname === item.href ? "text-primary" : ""
+                className={`block py-3 text-white/90 hover:text-[#4A90E2] transition-smooth font-medium ${
+                  location.pathname === item.href ? "text-[#4A90E2]" : ""
                 }`}
               >
                 {item.label}
@@ -87,7 +91,7 @@ const Header = () => {
             ))}
             <Button
               asChild
-              className="w-full mt-4 gradient-primary"
+              className="w-full mt-4 bg-[#4A90E2] hover:bg-[#357ABD] text-white"
             >
               <Link to="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
                 Contactar
