@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
@@ -53,14 +53,17 @@ const Header = () => {
                   location.pathname === item.href ? "text-[#52B8D8]" : ""
                 }`}
               >
-                {item.label}
+              {item.label}
               </Link>
             ))}
             <Button
               asChild
+              size="icon"
               className="bg-[#52B8D8] hover:bg-[#3da3c8] text-white"
             >
-              <Link to="/contacto">Contactar</Link>
+              <Link to="/auth" title="Iniciar Sesión">
+                <LogIn className="h-5 w-5" />
+              </Link>
             </Button>
           </nav>
 
@@ -86,15 +89,17 @@ const Header = () => {
                   location.pathname === item.href ? "text-[#52B8D8]" : ""
                 }`}
               >
-                {item.label}
+              {item.label}
               </Link>
             ))}
             <Button
               asChild
-              className="w-full mt-4 bg-[#52B8D8] hover:bg-[#3da3c8] text-white"
+              variant="outline"
+              className="w-full mt-4 border-[#52B8D8] text-[#52B8D8] hover:bg-[#52B8D8] hover:text-white"
             >
-              <Link to="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
-                Contactar
+              <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
+                <LogIn className="mr-2 h-4 w-4" />
+                Iniciar Sesión
               </Link>
             </Button>
           </nav>
