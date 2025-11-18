@@ -10,7 +10,7 @@ const Clients = () => {
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    if (!scrollContainer || clients.length === 0) return;
 
     let animationId: number;
     let scrollPosition = 0;
@@ -34,7 +34,7 @@ const Clients = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, []);
+  }, [clients]);
 
   if (isLoading || clients.length === 0) {
     return null;

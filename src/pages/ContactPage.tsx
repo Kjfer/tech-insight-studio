@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const ContactPage = () => {
   const { toast } = useToast();
@@ -190,6 +191,7 @@ const ContactPage = () => {
         </section>
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };
