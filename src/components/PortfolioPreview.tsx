@@ -99,8 +99,8 @@ const PortfolioPreview = () => {
                   <CardDescription className="text-base line-clamp-3">{template.description}</CardDescription>
                   {template.price && (
                     <div className="mt-4 flex items-center gap-2">
-                      <span className="text-2xl font-bold text-primary">${template.price}</span>
-                      <span className="text-sm text-muted-foreground">USD</span>
+                      <span className="text-2xl font-bold text-primary">S/. {template.price}</span>
+                      <span className="text-sm text-muted-foreground">Soles</span>
                     </div>
                   )}
                 </CardContent>

@@ -128,7 +128,7 @@ const Portfolio = () => {
                         <div className="flex items-start justify-between mb-2">
                           <Badge variant="secondary">{template.category?.name}</Badge>
                           {template.price && (
-                            <span className="text-xl font-bold text-primary">${template.price}</span>
+                            <span className="text-xl font-bold text-primary">S/. {template.price}</span>
                           )}
                         </div>
                         <CardTitle className="text-xl">{template.title}</CardTitle>
