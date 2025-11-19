@@ -35,21 +35,21 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="DatoDirecto" className="h-12 w-auto" />
-            <span className="text-2xl font-bold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 md:gap-3">
+            <img src={logo} alt="DatoDirecto" className="h-10 md:h-12 w-auto" />
+            <span className="text-xl md:text-2xl font-bold tracking-tight">
               <span className="text-[#FFFFFF]">DATO</span>
               <span className="text-[#52B8D8]">DIRECTO</span>
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-3 lg:space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 to={item.href}
-                className={`text-white/90 hover:text-[#52B8D8] transition-smooth font-medium ${
+                className={`text-white/90 hover:text-[#52B8D8] transition-smooth font-medium text-sm lg:text-base ${
                   location.pathname === item.href ? "text-[#52B8D8]" : ""
                 }`}
               >
