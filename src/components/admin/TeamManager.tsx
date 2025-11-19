@@ -6,7 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import ImageUpload from "./ImageUpload";
 
 interface TeamMember {
@@ -19,6 +26,7 @@ interface TeamMember {
 
 const TeamManager = () => {
   const [members, setMembers] = useState<TeamMember[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -66,6 +74,7 @@ const TeamManager = () => {
         });
       } else {
         toast({ title: "Miembro actualizado correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchMembers();
@@ -83,6 +92,7 @@ const TeamManager = () => {
         });
       } else {
         toast({ title: "Miembro creado correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchMembers();
       }
@@ -97,6 +107,7 @@ const TeamManager = () => {
       description: member.description,
       image_url: member.image_url || "",
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -131,12 +142,48 @@ const TeamManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Miembro" : "Nuevo Miembro del Equipo"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Equipo</h2>
+          <p className="text-muted-foreground">Miembros del equipo</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Miembro
+        </Button>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {members.map((member) => (
+          <Card key={member.id}>
+            <CardContent className="flex items-start justify-between p-4">
+              <div className="flex-1">
+                <h3 className="font-semibold">{member.name}</h3>
+                <p className="text-sm text-primary">{member.role}</p>
+                <p className="text-sm text-muted-foreground mt-1">{member.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => handleEdit(member)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => handleDelete(member.id)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Miembro" : "Nuevo Miembro del Equipo"}</SheetTitle>
+            <SheetDescription>
+              Completa la información del miembro
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
               <Label htmlFor="name">Nombre</Label>
               <Input
@@ -164,12 +211,15 @@ const TeamManager = () => {
                 required
               />
             </div>
-            <ImageUpload
-              currentImageUrl={formData.image_url}
-              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-            />
-            <div className="flex gap-2">
-              <Button type="submit">
+            <div>
+              <Label>Imagen</Label>
+              <ImageUpload
+                currentImageUrl={formData.image_url}
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+              />
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
                 {editingId ? "Actualizar" : "Crear"}
               </Button>
               {editingId && (
@@ -179,30 +229,8 @@ const TeamManager = () => {
               )}
             </div>
           </form>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {members.map((member) => (
-          <Card key={member.id}>
-            <CardContent className="flex items-start justify-between p-4">
-              <div className="flex-1">
-                <h3 className="font-semibold">{member.name}</h3>
-                <p className="text-sm text-primary">{member.role}</p>
-                <p className="text-sm text-muted-foreground mt-1">{member.description}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(member)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="destructive" onClick={() => handleDelete(member.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

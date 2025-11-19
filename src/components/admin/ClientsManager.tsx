@@ -5,7 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import ImageUpload from "./ImageUpload";
 
 interface Client {
@@ -16,6 +23,7 @@ interface Client {
 
 const ClientsManager = () => {
   const [clients, setClients] = useState<Client[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     logo_url: "",
@@ -58,6 +66,7 @@ const ClientsManager = () => {
       });
     } else {
       toast({ title: "Cliente agregado correctamente" });
+      setIsOpen(false);
       resetForm();
       fetchClients();
     }
@@ -92,29 +101,16 @@ const ClientsManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Agregar Cliente</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Nombre del Cliente</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-            </div>
-            <ImageUpload
-              currentImageUrl={formData.logo_url}
-              onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
-            />
-            <Button type="submit">Agregar Cliente</Button>
-          </form>
-        </CardContent>
-      </Card>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Clientes</h2>
+          <p className="text-muted-foreground">Logos de clientes</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Cliente
+        </Button>
+      </div>
 
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         {clients.map((client) => (
@@ -140,6 +136,36 @@ const ClientsManager = () => {
           </Card>
         ))}
       </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>Agregar Cliente</SheetTitle>
+            <SheetDescription>
+              Completa la información del cliente
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <div>
+              <Label htmlFor="name">Nombre del Cliente</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <Label>Logo</Label>
+              <ImageUpload
+                currentImageUrl={formData.logo_url}
+                onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+              />
+            </div>
+            <Button type="submit" className="w-full">Agregar Cliente</Button>
+          </form>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

@@ -5,7 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface Category {
   id: string;
@@ -15,6 +22,7 @@ interface Category {
 
 const CategoriesManager = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -60,6 +68,7 @@ const CategoriesManager = () => {
         });
       } else {
         toast({ title: "Categoría actualizada correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchCategories();
@@ -77,6 +86,7 @@ const CategoriesManager = () => {
         });
       } else {
         toast({ title: "Categoría creada correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchCategories();
       }
@@ -89,6 +99,7 @@ const CategoriesManager = () => {
       name: category.name,
       icon: category.icon,
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -121,44 +132,16 @@ const CategoriesManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Categoría" : "Nueva Categoría"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Nombre</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="icon">Icono (nombre de Lucide)</Label>
-              <Input
-                id="icon"
-                value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="FileSpreadsheet, Code, etc."
-                required
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? "Actualizar" : "Crear"}
-              </Button>
-              {editingId && (
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancelar
-                </Button>
-              )}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Categorías</h2>
+          <p className="text-muted-foreground">Organiza categorías de plantillas</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Categoría
+        </Button>
+      </div>
 
       <div className="grid gap-4">
         {categories.map((category) => (
@@ -180,6 +163,48 @@ const CategoriesManager = () => {
           </Card>
         ))}
       </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Categoría" : "Nueva Categoría"}</SheetTitle>
+            <SheetDescription>
+              Completa la información de la categoría
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <div>
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="icon">Icono (nombre de lucide-react)</Label>
+              <Input
+                id="icon"
+                value={formData.icon}
+                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                placeholder="ej: Folder, FileText, Database"
+                required
+              />
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
+                {editingId ? "Actualizar" : "Crear"}
+              </Button>
+              {editingId && (
+                <Button type="button" variant="outline" onClick={resetForm}>
+                  Cancelar
+                </Button>
+              )}
+            </div>
+          </form>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

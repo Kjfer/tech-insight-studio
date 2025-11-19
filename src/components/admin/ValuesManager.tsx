@@ -6,7 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface Value {
   id: string;
@@ -17,6 +24,7 @@ interface Value {
 
 const ValuesManager = () => {
   const [values, setValues] = useState<Value[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -63,6 +71,7 @@ const ValuesManager = () => {
         });
       } else {
         toast({ title: "Valor actualizado correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchValues();
@@ -80,6 +89,7 @@ const ValuesManager = () => {
         });
       } else {
         toast({ title: "Valor creado correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchValues();
       }
@@ -93,6 +103,7 @@ const ValuesManager = () => {
       description: value.description,
       icon: value.icon,
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -126,12 +137,47 @@ const ValuesManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Valor" : "Nuevo Valor"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Valores</h2>
+          <p className="text-muted-foreground">Valores corporativos</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Valor
+        </Button>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {values.map((value) => (
+          <Card key={value.id}>
+            <CardContent className="flex items-start justify-between p-4">
+              <div className="flex-1">
+                <h3 className="font-semibold">{value.title}</h3>
+                <p className="text-sm text-muted-foreground">{value.description}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => handleEdit(value)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => handleDelete(value.id)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Valor" : "Nuevo Valor"}</SheetTitle>
+            <SheetDescription>
+              Completa la información del valor
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
               <Label htmlFor="title">Título</Label>
               <Input
@@ -160,8 +206,8 @@ const ValuesManager = () => {
                 required
               />
             </div>
-            <div className="flex gap-2">
-              <Button type="submit">
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
                 {editingId ? "Actualizar" : "Crear"}
               </Button>
               {editingId && (
@@ -171,29 +217,8 @@ const ValuesManager = () => {
               )}
             </div>
           </form>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {values.map((value) => (
-          <Card key={value.id}>
-            <CardContent className="flex items-start justify-between p-4">
-              <div className="flex-1">
-                <h3 className="font-semibold">{value.title}</h3>
-                <p className="text-sm text-muted-foreground">{value.description}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(value)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="destructive" onClick={() => handleDelete(value.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
