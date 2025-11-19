@@ -7,7 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import ImageUpload from "./ImageUpload";
 
 interface Service {
@@ -21,6 +28,7 @@ interface Service {
 
 const ServicesManager = () => {
   const [services, setServices] = useState<Service[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -69,6 +77,7 @@ const ServicesManager = () => {
         });
       } else {
         toast({ title: "Servicio actualizado correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchServices();
@@ -86,6 +95,7 @@ const ServicesManager = () => {
         });
       } else {
         toast({ title: "Servicio creado correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchServices();
       }
@@ -101,6 +111,7 @@ const ServicesManager = () => {
       icon: service.icon,
       show_in_home: service.show_in_home,
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -136,67 +147,16 @@ const ServicesManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Servicio" : "Nuevo Servicio"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="title">Título</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="icon">Icono (nombre de Lucide)</Label>
-              <Input
-                id="icon"
-                value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="BarChart, FileSpreadsheet, etc."
-                required
-              />
-            </div>
-            <ImageUpload
-              currentImageUrl={formData.image_url}
-              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-            />
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="show_in_home"
-                checked={formData.show_in_home}
-                onCheckedChange={(checked) => 
-                  setFormData({ ...formData, show_in_home: checked as boolean })
-                }
-              />
-              <Label htmlFor="show_in_home">Mostrar en página de inicio</Label>
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? "Actualizar" : "Crear"}
-              </Button>
-              {editingId && (
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancelar
-                </Button>
-              )}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Servicios</h2>
+          <p className="text-muted-foreground">Administra los servicios ofrecidos</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Servicio
+        </Button>
+      </div>
 
       <div className="grid gap-4">
         {services.map((service) => (
@@ -223,6 +183,76 @@ const ServicesManager = () => {
           </Card>
         ))}
       </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Servicio" : "Nuevo Servicio"}</SheetTitle>
+            <SheetDescription>
+              Completa la información del servicio
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <div>
+              <Label htmlFor="title">Título</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="description">Descripción</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="icon">Icono (nombre de lucide-react)</Label>
+              <Input
+                id="icon"
+                value={formData.icon}
+                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                placeholder="ej: Code, Database, Globe"
+                required
+              />
+            </div>
+            <div>
+              <Label>Imagen</Label>
+              <ImageUpload
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                currentImageUrl={formData.image_url}
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="show_in_home"
+                checked={formData.show_in_home}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, show_in_home: checked as boolean })
+                }
+              />
+              <Label htmlFor="show_in_home" className="cursor-pointer">
+                Mostrar en página principal
+              </Label>
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
+                {editingId ? "Actualizar" : "Crear"}
+              </Button>
+              {editingId && (
+                <Button type="button" variant="outline" onClick={resetForm}>
+                  Cancelar
+                </Button>
+              )}
+            </div>
+          </form>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

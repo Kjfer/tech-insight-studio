@@ -5,7 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface Keyword {
   id: string;
@@ -14,6 +21,7 @@ interface Keyword {
 
 const KeywordsManager = () => {
   const [keywords, setKeywords] = useState<Keyword[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -58,6 +66,7 @@ const KeywordsManager = () => {
         });
       } else {
         toast({ title: "Palabra clave actualizada correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchKeywords();
@@ -75,6 +84,7 @@ const KeywordsManager = () => {
         });
       } else {
         toast({ title: "Palabra clave creada correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchKeywords();
       }
@@ -86,6 +96,7 @@ const KeywordsManager = () => {
     setFormData({
       name: keyword.name,
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -117,34 +128,16 @@ const KeywordsManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Palabra Clave" : "Nueva Palabra Clave"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Nombre</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? "Actualizar" : "Crear"}
-              </Button>
-              {editingId && (
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancelar
-                </Button>
-              )}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Palabras Clave</h2>
+          <p className="text-muted-foreground">Gestiona palabras clave para SEO</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Palabra Clave
+        </Button>
+      </div>
 
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {keywords.map((keyword) => (
@@ -163,6 +156,38 @@ const KeywordsManager = () => {
           </Card>
         ))}
       </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Palabra Clave" : "Nueva Palabra Clave"}</SheetTitle>
+            <SheetDescription>
+              Completa la información de la palabra clave
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <div>
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
+                {editingId ? "Actualizar" : "Crear"}
+              </Button>
+              {editingId && (
+                <Button type="button" variant="outline" onClick={resetForm}>
+                  Cancelar
+                </Button>
+              )}
+            </div>
+          </form>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

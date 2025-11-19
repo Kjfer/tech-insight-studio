@@ -7,6 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import ImageUpload from "./ImageUpload";
 
 interface HeroSlide {
@@ -20,6 +27,7 @@ interface HeroSlide {
 
 const HeroSlidesManager = () => {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -68,6 +76,7 @@ const HeroSlidesManager = () => {
         });
       } else {
         toast({ title: "Slide actualizado correctamente" });
+        setIsOpen(false);
         setEditingId(null);
         resetForm();
         fetchSlides();
@@ -85,6 +94,7 @@ const HeroSlidesManager = () => {
         });
       } else {
         toast({ title: "Slide creado correctamente" });
+        setIsOpen(false);
         resetForm();
         fetchSlides();
       }
@@ -100,6 +110,7 @@ const HeroSlidesManager = () => {
       image_url: slide.image_url,
       order_index: slide.order_index,
     });
+    setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -135,12 +146,48 @@ const HeroSlidesManager = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Editar Slide" : "Nuevo Slide"}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold">Slides del Hero</h2>
+          <p className="text-muted-foreground">Gestiona las imágenes del carrusel principal</p>
+        </div>
+        <Button onClick={() => setIsOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Agregar Slide
+        </Button>
+      </div>
+
+      <div className="grid gap-4">
+        {slides.map((slide) => (
+          <Card key={slide.id}>
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="flex-1">
+                <h3 className="font-semibold">{slide.title}</h3>
+                <p className="text-sm text-muted-foreground">{slide.highlight}</p>
+                <p className="text-xs text-muted-foreground mt-1">Orden: {slide.order_index}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => handleEdit(slide)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="destructive" onClick={() => handleDelete(slide.id)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="overflow-y-auto w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>{editingId ? "Editar Slide" : "Nuevo Slide"}</SheetTitle>
+            <SheetDescription>
+              Completa la información del slide
+            </SheetDescription>
+          </SheetHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
               <Label htmlFor="title">Título</Label>
               <Input
@@ -178,12 +225,15 @@ const HeroSlidesManager = () => {
                 required
               />
             </div>
-            <ImageUpload
-              currentImageUrl={formData.image_url}
-              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-            />
-            <div className="flex gap-2">
-              <Button type="submit">
+            <div>
+              <Label>Imagen</Label>
+              <ImageUpload
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                currentImageUrl={formData.image_url}
+              />
+            </div>
+            <div className="flex gap-2 pt-4">
+              <Button type="submit" className="flex-1">
                 {editingId ? "Actualizar" : "Crear"}
               </Button>
               {editingId && (
@@ -193,30 +243,8 @@ const HeroSlidesManager = () => {
               )}
             </div>
           </form>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4">
-        {slides.map((slide) => (
-          <Card key={slide.id}>
-            <CardContent className="flex items-center justify-between p-4">
-              <div className="flex-1">
-                <h3 className="font-semibold">{slide.title}</h3>
-                <p className="text-sm text-muted-foreground">{slide.highlight}</p>
-                <p className="text-xs text-muted-foreground mt-1">Orden: {slide.order_index}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(slide)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="destructive" onClick={() => handleDelete(slide.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
