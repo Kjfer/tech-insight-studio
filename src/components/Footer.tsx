@@ -37,7 +37,7 @@ const Footer = () => {
               <img src={logo} alt="DatoDirecto" className="h-12 w-auto mb-4" />
             </Link>
             <p className="text-sm text-white/70 mb-4">
-              Transformando datos en decisiones inteligentes desde 2010.
+              Transformando datos en decisiones inteligentes.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social, index) => (
@@ -87,16 +87,16 @@ const Footer = () => {
             <h3 className="font-semibold mb-4 text-white">Contacto</h3>
             <ul className="space-y-2 text-sm text-white/70">
               <li>
-                <a href="mailto:contacto@datodirecto.com" className="hover:text-[#52B8D8] transition-smooth">
-                  contacto@datodirecto.com
+                <a href="mailto:djaramillo@datodirecto.com" className="hover:text-[#52B8D8] transition-smooth">
+                  djaramillo@datodirecto.com
                 </a>
               </li>
               <li>
-                <a href="tel:+525512345678" className="hover:text-[#52B8D8] transition-smooth">
-                  +52 (55) 1234-5678
+                <a href="tel:+51987597973" className="hover:text-[#52B8D8] transition-smooth">
+                  +51 987 597 973
                 </a>
               </li>
-              <li>Ciudad de México, CDMX</li>
+              <li>Jirón Casapalca 1674  - Cercado de Lima</li>
             </ul>
           </div>
         </div>
@@ -107,14 +107,6 @@ const Footer = () => {
             <p className="text-sm text-white/70 text-center md:text-left">
               © {currentYear} DatoDirecto. Todos los derechos reservados.
             </p>
-            <div className="flex gap-6 text-sm text-white/70">
-              <a href="#" className="hover:text-[#52B8D8] transition-smooth">
-                Política de Privacidad
-              </a>
-              <a href="#" className="hover:text-[#52B8D8] transition-smooth">
-                Términos de Servicio
-              </a>
-            </div>
           </div>
         </div>
       </div>

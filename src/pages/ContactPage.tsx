@@ -46,20 +46,20 @@ const ContactPage = () => {
     {
       icon: Mail,
       title: "Email",
-      content: "contacto@datodirecto.com",
-      link: "mailto:contacto@datodirecto.com",
+      content: "djaramillo@datodirecto.com",
+      link: "mailto:djaramillo@datodirecto.com",
     },
     {
       icon: Phone,
       title: "Teléfono",
-      content: "+52 (55) 1234-5678",
-      link: "tel:+525512345678",
+      content: "+51 987597973",
+      link: "tel:+51987597973",
     },
     {
       icon: MapPin,
       title: "Ubicación",
-      content: "Ciudad de México, CDMX",
-      link: "#",
+      content: "Jirón Casapalca 1674  - Cercado de Lima",
+      link: "https://maps.app.goo.gl/NxHmLRwK3jAjdMrz8",
     },
   ];
 
