@@ -180,7 +180,7 @@ const Portfolio = () => {
             {/* Template Detail Modal */}
             {selectedTemplate && (
               <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null)}>
-                <DialogContent className="max-w-3xl">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <div className="flex items-center gap-3 mb-4">
                       {(() => {
@@ -205,32 +205,34 @@ const Portfolio = () => {
                     </DialogDescription>
                   </DialogHeader>
                   
-                  <div className="mt-4">
+                  <div className="mt-6 space-y-6">
+                    <div>
+                      <h4 className="font-semibold mb-4 text-lg">Características principales:</h4>
+                      <ul className="grid grid-cols-2 gap-3">
+                        {selectedTemplate.keywords?.map((kw: any) => (
+                          <li key={kw.keyword.id} className="flex items-center text-sm">
+                            <span className="w-2 h-2 rounded-full bg-primary mr-2" />
+                            {kw.keyword.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
                     {selectedTemplate.image_url && (
-                      <div className="w-full h-48 rounded-lg overflow-hidden mb-4">
+                      <div className="w-full rounded-lg overflow-hidden border border-border bg-muted/20">
                         <img 
                           src={selectedTemplate.image_url} 
                           alt={selectedTemplate.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-auto object-contain cursor-zoom-in hover:scale-[1.02] transition-transform duration-300"
+                          onClick={(e) => {
+                            const img = e.currentTarget;
+                            if (img.requestFullscreen) {
+                              img.requestFullscreen();
+                            }
+                          }}
                         />
                       </div>
                     )}
-                    
-                    <h4 className="font-semibold mb-3">Características principales:</h4>
-                    <ul className="grid grid-cols-2 gap-3">
-                      {selectedTemplate.keywords?.map((kw: any) => (
-                        <li key={kw.keyword.id} className="flex items-center text-sm">
-                          <span className="w-2 h-2 rounded-full bg-primary mr-2" />
-                          {kw.keyword.name}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="mt-6 p-6 bg-secondary/50 rounded-lg">
-                    <p className="text-sm text-muted-foreground text-center">
-                      Vista previa del dashboard - Funcionalidad completa disponible en la versión descargable
-                    </p>
                   </div>
 
                   <div className="flex gap-3 mt-4">
