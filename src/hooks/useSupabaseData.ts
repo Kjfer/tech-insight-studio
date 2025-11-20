@@ -196,3 +196,27 @@ export function useTeamMembers() {
 
   return { teamMembers, loading };
 }
+
+export function useSocialLinks() {
+  const [socialLinks, setSocialLinks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSocialLinks = async () => {
+      const { data, error } = await supabase
+        .from("social_links")
+        .select("*")
+        .order("order_index");
+      
+      if (!error && data) {
+        setSocialLinks(data);
+      }
+      setLoading(false);
+    };
+
+    fetchSocialLinks();
+  }, []);
+
+  return { socialLinks, loading };
+}
+

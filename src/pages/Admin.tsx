@@ -14,7 +14,8 @@ import {
   Info, 
   Heart, 
   Users, 
-  Building2 
+  Building2,
+  Share2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlidesManager from "@/components/admin/HeroSlidesManager";
@@ -26,6 +27,7 @@ import AboutUsManager from "@/components/admin/AboutUsManager";
 import ValuesManager from "@/components/admin/ValuesManager";
 import TeamManager from "@/components/admin/TeamManager";
 import ClientsManager from "@/components/admin/ClientsManager";
+import SocialLinksManager from "@/components/admin/SocialLinksManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -99,6 +101,7 @@ const Admin = () => {
       items: [
         { value: "categories", label: "Categorías", icon: Folder, description: "Organiza categorías de plantillas" },
         { value: "keywords", label: "Palabras Clave", icon: Tag, description: "Gestiona palabras clave para SEO" },
+        { value: "social", label: "Redes Sociales", icon: Share2, description: "Enlaces de redes sociales" },
       ]
     },
     {
@@ -188,6 +191,10 @@ const Admin = () => {
 
             <TabsContent value="clients">
               <ClientsManager />
+            </TabsContent>
+
+            <TabsContent value="social">
+              <SocialLinksManager />
             </TabsContent>
           </div>
         </Tabs>
