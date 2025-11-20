@@ -162,7 +162,7 @@ const Portfolio = () => {
                           asChild
                         >
                           <a
-                            href={`https://wa.me/593998765432?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${template.title}". ¿Podrían brindarme más información?`)}`}
+                            href={`https://wa.me/51987597973?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${template.title}". ¿Podrían brindarme más información?`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -242,7 +242,7 @@ const Portfolio = () => {
                       asChild
                     >
                       <a
-                        href={`https://wa.me/593998765432?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${selectedTemplate.title}". ¿Podrían brindarme más información?`)}`}
+                        href={`https://wa.me/51987597973?text=${encodeURIComponent(`Hola! Me interesa la plantilla "${selectedTemplate.title}". ¿Podrían brindarme más información?`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
