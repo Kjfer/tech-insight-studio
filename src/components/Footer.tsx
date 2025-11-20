@@ -1,10 +1,12 @@
-import { Linkedin, Instagram } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import * as ReactIcons from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { FaTiktok } from "react-icons/fa";
+import { useSocialLinks } from "@/hooks/useSupabaseData";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { socialLinks, loading } = useSocialLinks();
 
   const quickLinks = [
     { label: "Inicio", href: "/" },
@@ -21,11 +23,14 @@ const Footer = () => {
     "Plantillas Power BI",
   ];
 
-  const socialLinks = [
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: FaTiktok, href: "#", label: "TikTok" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-  ];
+  const getIcon = (iconName: string) => {
+    // @ts-ignore
+    const LucideIcon = LucideIcons[iconName];
+    // @ts-ignore
+    const ReactIcon = ReactIcons[iconName];
+    
+    return LucideIcon || ReactIcon || LucideIcons.Link;
+  };
 
   return (
     <footer className="bg-[#2737A0] border-t border-white/10">
@@ -39,18 +44,25 @@ const Footer = () => {
             <p className="text-sm text-white/70 mb-4">
               Transformando datos en decisiones inteligentes.
             </p>
-            <div className="flex gap-3">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-white/10 hover:bg-[#52B8D8] hover:text-white flex items-center justify-center transition-smooth text-white/80"
-                >
-                  <social.icon size={18} />
-                </a>
-              ))}
-            </div>
+            {!loading && (
+              <div className="flex gap-3">
+                {socialLinks.map((social) => {
+                  const Icon = getIcon(social.icon);
+                  return (
+                    <a
+                      key={social.id}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.platform}
+                      className="w-10 h-10 rounded-lg bg-white/10 hover:bg-[#52B8D8] hover:text-white flex items-center justify-center transition-smooth text-white/80"
+                    >
+                      <Icon size={18} />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}

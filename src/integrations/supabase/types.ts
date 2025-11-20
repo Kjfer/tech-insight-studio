@@ -176,6 +176,36 @@ export type Database = {
         }
         Relationships: []
       }
+      social_links: {
+        Row: {
+          created_at: string | null
+          icon: string
+          id: string
+          order_index: number
+          platform: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          icon: string
+          id?: string
+          order_index?: number
+          platform: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          icon?: string
+          id?: string
+          order_index?: number
+          platform?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           created_at: string | null

@@ -97,6 +97,19 @@ const PortfolioPreview = () => {
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base line-clamp-3">{template.description}</CardDescription>
+                  {template.keywords && template.keywords.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {template.keywords.slice(0, 3).map((kw: any) => (
+                        <Badge
+                          key={kw.keyword.id}
+                          variant="secondary"
+                          className="text-xs"
+                        >
+                          {kw.keyword.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                   {template.price && (
                     <div className="mt-4 flex items-center gap-2">
                       <span className="text-2xl font-bold text-primary">S/. {template.price}</span>

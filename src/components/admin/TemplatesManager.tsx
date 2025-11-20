@@ -36,8 +36,10 @@ interface Category {
 const TemplatesManager = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [keywords, setKeywords] = useState<{ id: string; name: string }[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -51,6 +53,7 @@ const TemplatesManager = () => {
   useEffect(() => {
     fetchTemplates();
     fetchCategories();
+    fetchKeywords();
   }, []);
 
   const fetchTemplates = async () => {
@@ -79,6 +82,15 @@ const TemplatesManager = () => {
     setCategories(data || []);
   };
 
+  const fetchKeywords = async () => {
+    const { data } = await supabase
+      .from("keywords")
+      .select("*")
+      .order("name");
+    
+    setKeywords(data || []);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -101,6 +113,8 @@ const TemplatesManager = () => {
           variant: "destructive",
         });
       } else {
+        // Update keywords
+        await updateTemplateKeywords(editingId);
         toast({ title: "Plantilla actualizada correctamente" });
         setIsOpen(false);
         setEditingId(null);
@@ -108,9 +122,11 @@ const TemplatesManager = () => {
         fetchTemplates();
       }
     } else {
-      const { error } = await supabase
+      const { data: newTemplate, error } = await supabase
         .from("templates")
-        .insert([dataToSubmit]);
+        .insert([dataToSubmit])
+        .select()
+        .single();
       
       if (error) {
         toast({
@@ -119,6 +135,8 @@ const TemplatesManager = () => {
           variant: "destructive",
         });
       } else {
+        // Add keywords
+        await updateTemplateKeywords(newTemplate.id);
         toast({ title: "Plantilla creada correctamente" });
         setIsOpen(false);
         resetForm();
@@ -127,7 +145,27 @@ const TemplatesManager = () => {
     }
   };
 
-  const handleEdit = (template: Template) => {
+  const updateTemplateKeywords = async (templateId: string) => {
+    // Delete existing keywords
+    await supabase
+      .from("template_keywords")
+      .delete()
+      .eq("template_id", templateId);
+
+    // Insert new keywords
+    if (selectedKeywords.length > 0) {
+      const keywordRecords = selectedKeywords.map(keywordId => ({
+        template_id: templateId,
+        keyword_id: keywordId
+      }));
+      
+      await supabase
+        .from("template_keywords")
+        .insert(keywordRecords);
+    }
+  };
+
+  const handleEdit = async (template: Template) => {
     setEditingId(template.id);
     setFormData({
       title: template.title,
@@ -137,6 +175,14 @@ const TemplatesManager = () => {
       price: template.price?.toString() || "",
       is_featured: template.is_featured,
     });
+    
+    // Fetch keywords for this template
+    const { data: templateKeywords } = await supabase
+      .from("template_keywords")
+      .select("keyword_id")
+      .eq("template_id", template.id);
+    
+    setSelectedKeywords(templateKeywords?.map(tk => tk.keyword_id) || []);
     setIsOpen(true);
   };
 
@@ -169,7 +215,16 @@ const TemplatesManager = () => {
       price: "",
       is_featured: false,
     });
+    setSelectedKeywords([]);
     setEditingId(null);
+  };
+
+  const toggleKeyword = (keywordId: string) => {
+    setSelectedKeywords(prev =>
+      prev.includes(keywordId)
+        ? prev.filter(id => id !== keywordId)
+        : [...prev, keywordId]
+    );
   };
 
   return (
@@ -287,6 +342,26 @@ const TemplatesManager = () => {
               <Label htmlFor="is_featured" className="cursor-pointer">
                 Marcar como destacada
               </Label>
+            </div>
+            <div>
+              <Label>Palabras Clave</Label>
+              <div className="border rounded-md p-3 max-h-40 overflow-y-auto space-y-2">
+                {keywords.map((keyword) => (
+                  <div key={keyword.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`keyword-${keyword.id}`}
+                      checked={selectedKeywords.includes(keyword.id)}
+                      onCheckedChange={() => toggleKeyword(keyword.id)}
+                    />
+                    <Label
+                      htmlFor={`keyword-${keyword.id}`}
+                      className="cursor-pointer text-sm"
+                    >
+                      {keyword.name}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="flex gap-2 pt-4">
               <Button type="submit" className="flex-1">
