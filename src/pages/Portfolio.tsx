@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle, Search } from "lucide-react";
+import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,10 +16,13 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { useTemplates, useCategories } from "@/hooks/useSupabaseData";
 
+const ITEMS_PER_PAGE = 9;
+
 const Portfolio = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [activeFilter, setActiveFilter] = useState("Todos");
   const [keywordSearch, setKeywordSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   
   const { templates = [], loading: templatesLoading } = useTemplates();
   const { categories = [], loading: categoriesLoading } = useCategories();
@@ -58,6 +61,19 @@ const Portfolio = () => {
 
     return result;
   }, [templates, activeFilter, keywordSearch]);
+
+  // Reset to page 1 when filters change
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [activeFilter, keywordSearch]);
+
+  const totalPages = Math.ceil(filteredTemplates.length / ITEMS_PER_PAGE);
+  
+  const paginatedTemplates = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredTemplates.slice(startIndex, endIndex);
+  }, [filteredTemplates, currentPage]);
 
   return (
     <div className="min-h-screen">
@@ -112,8 +128,9 @@ const Portfolio = () => {
                 <p className="text-muted-foreground">No se encontraron plantillas con los filtros seleccionados.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredTemplates.map((template) => {
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {paginatedTemplates.map((template) => {
                   const Icon = categoryIcons[template.category?.name || ""] || FileSpreadsheet;
                   const color = categoryColors[template.category?.name || ""] || "text-gray-600";
                   
@@ -191,8 +208,46 @@ const Portfolio = () => {
                       </CardFooter>
                     </Card>
                   );
-                })}
-              </div>
+                  })}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-12">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </Button>
+                    
+                    <div className="flex gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? "default" : "outline"}
+                          size="icon"
+                          onClick={() => setCurrentPage(page)}
+                          className={currentPage === page ? "gradient-primary" : ""}
+                        >
+                          {page}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
 
             {/* Template Detail Modal */}
