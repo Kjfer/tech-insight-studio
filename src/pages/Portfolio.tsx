@@ -119,9 +119,27 @@ const Portfolio = () => {
                   
                   return (
                     <Card key={template.id} className="hover-lift overflow-hidden group">
-                      <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative overflow-hidden">
-                        <Icon size={64} className={`${color} group-hover:scale-110 transition-smooth`} />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
+                      <div className="h-48 relative overflow-hidden bg-muted">
+                        {template.image_url ? (
+                          <>
+                            <img 
+                              src={template.image_url} 
+                              alt={template.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                            <div className="absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-background/90 backdrop-blur-sm flex items-center justify-center">
+                              <Icon className={`${color} w-5 h-5`} />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                              <Icon size={64} className={`${color} group-hover:scale-110 transition-smooth`} />
+                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
+                          </>
+                        )}
                       </div>
                       
                       <CardHeader>
