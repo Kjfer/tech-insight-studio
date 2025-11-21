@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, Linkedin, Instagram } from "lucide-react";
-import { FaTiktok } from "react-icons/fa";
+import { FaTiktok, FaWhatsapp, FaFacebook, FaTwitter, FaYoutube } from "react-icons/fa";
+import * as LucideIcons from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { useSocialLinks } from "@/hooks/useSupabaseData";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactPage = () => {
   const { toast } = useToast();
@@ -18,11 +21,35 @@ const ContactPage = () => {
     company: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { socialLinks, loading: socialLinksLoading } = useSocialLinks();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getIcon = (iconName: string) => {
+    const iconMap: { [key: string]: any } = {
+      FaLinkedin: Linkedin,
+      FaTiktok: FaTiktok,
+      FaInstagram: Instagram,
+      FaWhatsapp: FaWhatsapp,
+      FaFacebook: FaFacebook,
+      FaTwitter: FaTwitter,
+      FaYoutube: FaYoutube,
+    };
+
+    if (iconMap[iconName]) {
+      return iconMap[iconName];
+    }
+
+    const LucideIcon = (LucideIcons as any)[iconName];
+    if (LucideIcon) {
+      return LucideIcon;
+    }
+
+    return Mail;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Error",
@@ -32,14 +59,31 @@ const ContactPage = () => {
       return;
     }
 
-    // Success message
-    toast({
-      title: "¡Mensaje enviado!",
-      description: "Nos pondremos en contacto contigo pronto.",
-    });
+    setIsSubmitting(true);
 
-    // Reset form
-    setFormData({ name: "", email: "", company: "", message: "" });
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Mensaje enviado!",
+        description: "Nos pondremos en contacto contigo pronto.",
+      });
+
+      setFormData({ name: "", email: "", company: "", message: "" });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al enviar el mensaje. Por favor intenta de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -63,11 +107,6 @@ const ContactPage = () => {
     },
   ];
 
-  const socialLinks = [
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: FaTiktok, href: "#", label: "TikTok" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-  ];
 
   return (
     <div className="min-h-screen">
@@ -147,9 +186,13 @@ const ContactPage = () => {
                           required
                         />
                       </div>
-                      <Button type="submit" className="w-full gradient-primary hover-glow">
+                      <Button 
+                        type="submit" 
+                        className="w-full gradient-primary hover-glow"
+                        disabled={isSubmitting}
+                      >
                         <Send size={16} className="mr-2" />
-                        Enviar Mensaje
+                        {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
                       </Button>
                     </form>
                   </CardContent>
@@ -170,18 +213,31 @@ const ContactPage = () => {
                       <CardTitle className="text-xl">Síguenos</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex gap-4">
-                        {socialLinks.map((social, index) => (
-                          <a
-                            key={index}
-                            href={social.href}
-                            aria-label={social.label}
-                            className="w-12 h-12 rounded-xl bg-secondary hover:bg-primary hover:text-white flex items-center justify-center transition-smooth"
-                          >
-                            <social.icon size={20} />
-                          </a>
-                        ))}
-                      </div>
+                      {socialLinksLoading ? (
+                        <div className="flex gap-4">
+                          {[1, 2, 3].map((i) => (
+                            <div key={i} className="w-12 h-12 rounded-xl bg-secondary animate-pulse" />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 flex-wrap">
+                          {socialLinks?.map((social) => {
+                            const IconComponent = getIcon(social.icon);
+                            return (
+                              <a
+                                key={social.id}
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={social.platform}
+                                className="w-12 h-12 rounded-xl bg-secondary hover:bg-primary hover:text-white flex items-center justify-center transition-smooth"
+                              >
+                                <IconComponent size={20} />
+                              </a>
+                            );
+                          })}
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
