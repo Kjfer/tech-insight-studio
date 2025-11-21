@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { FileSpreadsheet, Code2, BarChart3, Eye, MessageCircle, Search, ChevronLeft, ChevronRight, CreditCard, Wallet, Banknote, Building, Smartphone } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { useTemplates, useCategories } from "@/hooks/useSupabaseData";
+import { useTemplates, useCategories, usePaymentMethods } from "@/hooks/useSupabaseData";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -26,6 +26,7 @@ const Portfolio = () => {
   
   const { templates = [], loading: templatesLoading } = useTemplates();
   const { categories = [], loading: categoriesLoading } = useCategories();
+  const { paymentMethods = [] } = usePaymentMethods();
 
   const categoryIcons: Record<string, any> = {
     "Excel": FileSpreadsheet,
@@ -304,6 +305,39 @@ const Portfolio = () => {
                             }
                           }}
                         />
+                      </div>
+                    )}
+
+                    {paymentMethods.length > 0 && (
+                      <div className="border-t border-border pt-6">
+                        <h4 className="font-semibold mb-4 text-lg">Métodos de Pago:</h4>
+                        <div className="grid gap-4">
+                          {paymentMethods.map((method) => {
+                            const iconMap: { [key: string]: any } = {
+                              CreditCard,
+                              Wallet,
+                              Banknote,
+                              Building,
+                              Smartphone
+                            };
+                            const Icon = iconMap[method.icon] || CreditCard;
+                            
+                            return (
+                              <div key={method.id} className="flex gap-3 p-4 rounded-lg bg-muted/50 border border-border">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                  <Icon className="w-5 h-5 text-primary" />
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold mb-1">{method.name}</h5>
+                                  <p className="text-sm text-muted-foreground mb-2">{method.description}</p>
+                                  <p className="text-sm font-mono bg-background/50 p-2 rounded border border-border/50">
+                                    {method.account_info}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>

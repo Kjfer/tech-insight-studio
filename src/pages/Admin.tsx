@@ -15,7 +15,8 @@ import {
   Heart, 
   Users, 
   Building2,
-  Share2
+  Share2,
+  CreditCard
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlidesManager from "@/components/admin/HeroSlidesManager";
@@ -28,6 +29,7 @@ import ValuesManager from "@/components/admin/ValuesManager";
 import TeamManager from "@/components/admin/TeamManager";
 import ClientsManager from "@/components/admin/ClientsManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
+import { PaymentMethodsManager } from "@/components/admin/PaymentMethodsManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -102,6 +104,7 @@ const Admin = () => {
         { value: "categories", label: "Categorías", icon: Folder, description: "Organiza categorías de plantillas" },
         { value: "keywords", label: "Palabras Clave", icon: Tag, description: "Gestiona palabras clave para SEO" },
         { value: "social", label: "Redes Sociales", icon: Share2, description: "Enlaces de redes sociales" },
+        { value: "payment", label: "Métodos de Pago", icon: CreditCard, description: "Gestiona métodos de pago" },
       ]
     },
     {
@@ -195,6 +198,10 @@ const Admin = () => {
 
             <TabsContent value="social">
               <SocialLinksManager />
+            </TabsContent>
+
+            <TabsContent value="payment">
+              <PaymentMethodsManager />
             </TabsContent>
           </div>
         </Tabs>
