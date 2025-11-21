@@ -201,10 +201,26 @@ const ContactPage = () => {
                 {/* Map & Social */}
                 <div className="space-y-6">
                   <Card className="hover-lift">
-                    <CardContent className="p-0">
-                      <div className="h-64 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
-                        <MapPin size={48} className="text-primary" />
-                      </div>
+                    <CardContent className="p-6">
+                      <a 
+                        href="https://maps.app.goo.gl/NxHmLRwK3jAjdMrz8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <div className="h-64 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg flex flex-col items-center justify-center gap-4 hover:from-primary/20 hover:to-accent/20 transition-smooth group">
+                          <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition-smooth">
+                            <MapPin size={32} className="text-white" />
+                          </div>
+                          <div className="text-center px-4">
+                            <p className="font-semibold text-foreground mb-1">Nuestra Ubicación</p>
+                            <p className="text-sm text-muted-foreground">
+                              Jirón Casapalca 1674<br />
+                              Cercado de Lima
+                            </p>
+                          </div>
+                        </div>
+                      </a>
                     </CardContent>
                   </Card>
 
