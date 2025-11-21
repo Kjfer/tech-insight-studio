@@ -158,9 +158,9 @@ const TeamManager = () => {
           <Card key={member.id}>
             <CardContent className="flex items-start justify-between p-4">
               <div className="flex-1">
-                <h3 className="font-semibold">{member.name}</h3>
-                <p className="text-sm text-primary">{member.role}</p>
-                <p className="text-sm text-muted-foreground mt-1">{member.description}</p>
+                <h3 className="font-semibold break-words">{member.name}</h3>
+                <p className="text-sm text-primary break-words">{member.role}</p>
+                <p className="text-sm text-muted-foreground mt-1 line-clamp-3 break-words">{member.description}</p>
               </div>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" onClick={() => handleEdit(member)}>
@@ -209,7 +209,9 @@ const TeamManager = () => {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
+                maxLength={400}
               />
+              <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
             </div>
             <div>
               <Label>Imagen</Label>

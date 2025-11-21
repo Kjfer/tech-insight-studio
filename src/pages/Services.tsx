@@ -55,8 +55,8 @@ const Services = () => {
                         </div>
                       </div>
                       <CardHeader>
-                        <CardTitle className="text-xl mb-2">{service.title}</CardTitle>
-                        <CardDescription className="text-base">{service.description}</CardDescription>
+                        <CardTitle className="text-xl mb-2 break-words">{service.title}</CardTitle>
+                        <CardDescription className="text-base line-clamp-3 break-words">{service.description}</CardDescription>
                       </CardHeader>
                     </Card>
                   );

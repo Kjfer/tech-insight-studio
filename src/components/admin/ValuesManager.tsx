@@ -165,8 +165,8 @@ const ValuesManager = () => {
           <Card key={value.id}>
             <CardContent className="flex items-start justify-between p-4">
               <div className="flex-1">
-                <h3 className="font-semibold">{value.title}</h3>
-                <p className="text-sm text-muted-foreground">{value.description}</p>
+                <h3 className="font-semibold break-words">{value.title}</h3>
+                <p className="text-sm text-muted-foreground line-clamp-2 break-words">{value.description}</p>
               </div>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" onClick={() => handleEdit(value)}>
@@ -206,7 +206,9 @@ const ValuesManager = () => {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
+                maxLength={300}
               />
+              <p className="text-xs text-muted-foreground mt-1">Máximo 300 caracteres.</p>
             </div>
             <div>
               <Label htmlFor="icon">Icono</Label>
