@@ -91,7 +91,9 @@ const AboutUsManager = () => {
               onChange={(e) => setAboutData({ ...aboutData, mission: e.target.value })}
               required
               rows={4}
+              maxLength={400}
             />
+            <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
           </div>
           <div>
             <Label htmlFor="vision">Visión</Label>
@@ -101,7 +103,9 @@ const AboutUsManager = () => {
               onChange={(e) => setAboutData({ ...aboutData, vision: e.target.value })}
               required
               rows={4}
+              maxLength={400}
             />
+            <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
           </div>
           <div>
             <Label htmlFor="history">Nuestra Historia</Label>
@@ -111,7 +115,9 @@ const AboutUsManager = () => {
               onChange={(e) => setAboutData({ ...aboutData, history: e.target.value })}
               required
               rows={6}
+              maxLength={800}
             />
+            <p className="text-xs text-muted-foreground mt-1">Máximo 800 caracteres.</p>
           </div>
           <Button type="submit">Guardar Cambios</Button>
         </form>

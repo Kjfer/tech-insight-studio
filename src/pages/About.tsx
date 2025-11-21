@@ -49,7 +49,7 @@ const About = () => {
                     {aboutLoading ? (
                       <Skeleton className="h-20 w-full" />
                     ) : (
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed line-clamp-5 break-words">
                         {aboutUs?.mission || "Empoderar a las organizaciones con soluciones tecnológicas innovadoras."}
                       </p>
                     )}
@@ -67,7 +67,7 @@ const About = () => {
                     {aboutLoading ? (
                       <Skeleton className="h-20 w-full" />
                     ) : (
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed line-clamp-5 break-words">
                         {aboutUs?.vision || "Ser el referente en asesoría tecnológica y desarrollo de herramientas analíticas."}
                       </p>
                     )}
@@ -87,7 +87,7 @@ const About = () => {
                   {aboutLoading ? (
                     <Skeleton className="h-24 w-full" />
                   ) : (
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed line-clamp-6 break-words">
                       {aboutUs?.history || "Nuestra historia de crecimiento y compromiso con la excelencia."}
                     </p>
                   )}
