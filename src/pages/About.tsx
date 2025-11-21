@@ -1,55 +1,29 @@
-import { Target, Eye, History, Heart, Users, Award } from "lucide-react";
+import { Target, Eye, History, Heart, Users, Award, Lightbulb, Shield, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { useAboutUs, useValues, useTeamMembers } from "@/hooks/useSupabaseData";
 
 const About = () => {
-  const values = [
-    {
-      icon: Heart,
-      title: "Compromiso",
-      description: "Dedicados a la excelencia en cada proyecto que emprendemos",
-    },
-    {
-      icon: Users,
-      title: "Colaboración",
-      description: "Trabajamos en estrecha colaboración con nuestros clientes",
-    },
-    {
-      icon: Award,
-      title: "Calidad",
-      description: "Estándares superiores en todos nuestros entregables",
-    },
-    {
-      icon: Target,
-      title: "Resultados",
-      description: "Enfocados en generar impacto medible y sostenible",
-    },
-  ];
+  const { aboutUs, loading: aboutLoading } = useAboutUs();
+  const { values, loading: valuesLoading } = useValues();
+  const { teamMembers, loading: teamLoading } = useTeamMembers();
 
-  const team = [
-    {
-      name: "Carlos Rodríguez",
-      role: "CEO & Fundador",
-      description: "Experto en transformación digital con más de 15 años de experiencia en consultoría tecnológica",
-    },
-    {
-      name: "María González",
-      role: "Directora de Tecnología",
-      description: "Especialista en desarrollo de soluciones analíticas y business intelligence",
-    },
-    {
-      name: "Juan Martínez",
-      role: "Lead Developer",
-      description: "Ingeniero de software con expertise en Python, automatización y machine learning",
-    },
-    {
-      name: "Ana Silva",
-      role: "Data Analyst Senior",
-      description: "Experta en Excel avanzado, Power BI y análisis de datos financieros",
-    },
-  ];
+  // Icon mapping for dynamic icon rendering
+  const iconMap: Record<string, any> = {
+    Heart,
+    Users,
+    Award,
+    Target,
+    Eye,
+    History,
+    Lightbulb,
+    Shield,
+    Sparkles,
+  };
 
   return (
     <div className="min-h-screen">
@@ -72,11 +46,13 @@ const About = () => {
                     <CardTitle className="text-2xl">Nuestra Misión</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Empoderar a las organizaciones con soluciones tecnológicas innovadoras y accesibles, 
-                      transformando datos en conocimiento accionable que impulse la toma de decisiones estratégicas 
-                      y el crecimiento sostenible del negocio.
-                    </p>
+                    {aboutLoading ? (
+                      <Skeleton className="h-20 w-full" />
+                    ) : (
+                      <p className="text-muted-foreground leading-relaxed">
+                        {aboutUs?.mission || "Empoderar a las organizaciones con soluciones tecnológicas innovadoras."}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -88,11 +64,13 @@ const About = () => {
                     <CardTitle className="text-2xl">Nuestra Visión</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Ser el referente latinoamericano en asesoría tecnológica y desarrollo de herramientas 
-                      analíticas, reconocidos por nuestra capacidad de simplificar lo complejo y entregar 
-                      soluciones que generan valor tangible en cada implementación.
-                    </p>
+                    {aboutLoading ? (
+                      <Skeleton className="h-20 w-full" />
+                    ) : (
+                      <p className="text-muted-foreground leading-relaxed">
+                        {aboutUs?.vision || "Ser el referente en asesoría tecnológica y desarrollo de herramientas analíticas."}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -106,13 +84,13 @@ const About = () => {
                   <CardTitle className="text-2xl">Nuestra Historia</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Desde 2010, DatoDirecto ha evolucionado de un pequeño equipo de consultores a una 
-                    empresa líder en soluciones tecnológicas. Comenzamos ayudando a PyMEs con análisis de 
-                    datos básicos y hoy servimos a organizaciones de todos los tamaños con herramientas 
-                    sofisticadas de Excel, Python y Power BI. Hemos completado más de 500 proyectos exitosos 
-                    y desarrollado plantillas especializadas que han optimizado procesos en múltiples industrias.
-                  </p>
+                  {aboutLoading ? (
+                    <Skeleton className="h-24 w-full" />
+                  ) : (
+                    <p className="text-muted-foreground leading-relaxed">
+                      {aboutUs?.history || "Nuestra historia de crecimiento y compromiso con la excelencia."}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -122,21 +100,40 @@ const About = () => {
               <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
                 Nuestros <span className="text-primary">Valores</span>
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {values.map((value, index) => (
-                  <Card key={index} className="hover-lift text-center">
-                    <CardHeader>
-                      <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4">
-                        <value.icon className="text-white" size={28} />
-                      </div>
-                      <CardTitle className="text-lg">{value.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">{value.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {valuesLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...Array(4)].map((_, i) => (
+                    <Card key={i} className="text-center">
+                      <CardHeader>
+                        <Skeleton className="w-16 h-16 rounded-2xl mx-auto mb-4" />
+                        <Skeleton className="h-6 w-24 mx-auto" />
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-12 w-full" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {values.map((value) => {
+                    const IconComponent = iconMap[value.icon] || Heart;
+                    return (
+                      <Card key={value.id} className="hover-lift text-center">
+                        <CardHeader>
+                          <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4">
+                            <IconComponent className="text-white" size={28} />
+                          </div>
+                          <CardTitle className="text-lg">{value.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">{value.description}</p>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Team */}
@@ -144,24 +141,42 @@ const About = () => {
               <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
                 Nuestro <span className="text-primary">Equipo</span>
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {team.map((member, index) => (
-                  <Card key={index} className="hover-lift text-center">
-                    <CardHeader>
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent mx-auto mb-4 flex items-center justify-center">
-                        <span className="text-3xl font-bold text-white">
-                          {member.name.split(" ").map(n => n[0]).join("")}
-                        </span>
-                      </div>
-                      <CardTitle className="text-lg">{member.name}</CardTitle>
-                      <p className="text-sm text-primary font-medium">{member.role}</p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">{member.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {teamLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...Array(4)].map((_, i) => (
+                    <Card key={i} className="text-center">
+                      <CardHeader>
+                        <Skeleton className="w-24 h-24 rounded-full mx-auto mb-4" />
+                        <Skeleton className="h-6 w-32 mx-auto" />
+                        <Skeleton className="h-4 w-24 mx-auto" />
+                      </CardHeader>
+                      <CardContent>
+                        <Skeleton className="h-16 w-full" />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {teamMembers.map((member) => (
+                    <Card key={member.id} className="hover-lift text-center">
+                      <CardHeader>
+                        <Avatar className="w-24 h-24 mx-auto mb-4">
+                          <AvatarImage src={member.image_url || undefined} alt={member.name} />
+                          <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-3xl font-bold text-white">
+                            {member.name.split(" ").map(n => n[0]).join("")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <CardTitle className="text-lg">{member.name}</CardTitle>
+                        <p className="text-sm text-primary font-medium">{member.role}</p>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">{member.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
