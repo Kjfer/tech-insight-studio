@@ -110,6 +110,42 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_methods: {
+        Row: {
+          account_info: string
+          created_at: string | null
+          description: string
+          icon: string
+          id: string
+          is_active: boolean | null
+          name: string
+          order_index: number
+          updated_at: string | null
+        }
+        Insert: {
+          account_info: string
+          created_at?: string | null
+          description: string
+          icon?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          order_index?: number
+          updated_at?: string | null
+        }
+        Update: {
+          account_info?: string
+          created_at?: string | null
+          description?: string
+          icon?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          order_index?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       service_keywords: {
         Row: {
           id: string

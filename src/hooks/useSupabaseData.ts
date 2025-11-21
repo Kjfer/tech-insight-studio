@@ -220,3 +220,27 @@ export function useSocialLinks() {
   return { socialLinks, loading };
 }
 
+export function usePaymentMethods() {
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPaymentMethods = async () => {
+      const { data, error } = await supabase
+        .from("payment_methods")
+        .select("*")
+        .eq("is_active", true)
+        .order("order_index");
+      
+      if (!error && data) {
+        setPaymentMethods(data);
+      }
+      setLoading(false);
+    };
+
+    fetchPaymentMethods();
+  }, []);
+
+  return { paymentMethods, loading };
+}
+
