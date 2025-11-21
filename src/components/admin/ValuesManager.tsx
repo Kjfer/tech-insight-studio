@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Heart, Users, Award, Target, Eye, Lightbulb, Shield, Sparkles } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -21,6 +22,17 @@ interface Value {
   description: string;
   icon: string;
 }
+
+const VALUE_ICONS = [
+  { name: "Heart", label: "Corazón", component: Heart },
+  { name: "Users", label: "Usuarios", component: Users },
+  { name: "Award", label: "Premio", component: Award },
+  { name: "Target", label: "Objetivo", component: Target },
+  { name: "Eye", label: "Visión", component: Eye },
+  { name: "Lightbulb", label: "Innovación", component: Lightbulb },
+  { name: "Shield", label: "Seguridad", component: Shield },
+  { name: "Sparkles", label: "Excelencia", component: Sparkles },
+];
 
 const ValuesManager = () => {
   const [values, setValues] = useState<Value[]>([]);
@@ -197,14 +209,28 @@ const ValuesManager = () => {
               />
             </div>
             <div>
-              <Label htmlFor="icon">Icono (nombre de Lucide)</Label>
-              <Input
-                id="icon"
+              <Label htmlFor="icon">Icono</Label>
+              <Select
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="Target, Users, Heart, etc."
-                required
-              />
+                onValueChange={(value) => setFormData({ ...formData, icon: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un icono" />
+                </SelectTrigger>
+                <SelectContent>
+                  {VALUE_ICONS.map((icon) => {
+                    const IconComponent = icon.component;
+                    return (
+                      <SelectItem key={icon.name} value={icon.name}>
+                        <div className="flex items-center gap-2">
+                          <IconComponent className="h-4 w-4" />
+                          <span>{icon.label}</span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex gap-2 pt-4">
               <Button type="submit" className="flex-1">

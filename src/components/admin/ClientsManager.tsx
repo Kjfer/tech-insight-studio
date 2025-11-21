@@ -160,6 +160,7 @@ const ClientsManager = () => {
               <ImageUpload
                 currentImageUrl={formData.logo_url}
                 onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+                onImageDeleted={() => setFormData({ ...formData, logo_url: "" })}
               />
             </div>
             <Button type="submit" className="w-full">Agregar Cliente</Button>

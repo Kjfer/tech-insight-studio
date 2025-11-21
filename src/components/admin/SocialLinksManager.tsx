@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Linkedin, Instagram, Facebook, Twitter, Youtube, Mail } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FaTiktok, FaWhatsapp } from "react-icons/fa";
 import {
   Sheet,
   SheetContent,
@@ -21,6 +23,17 @@ interface SocialLink {
   icon: string;
   order_index: number;
 }
+
+const SOCIAL_ICONS = [
+  { name: "Linkedin", label: "LinkedIn", component: Linkedin },
+  { name: "Instagram", label: "Instagram", component: Instagram },
+  { name: "Facebook", label: "Facebook", component: Facebook },
+  { name: "Twitter", label: "Twitter/X", component: Twitter },
+  { name: "Youtube", label: "YouTube", component: Youtube },
+  { name: "FaTiktok", label: "TikTok", component: FaTiktok },
+  { name: "FaWhatsapp", label: "WhatsApp", component: FaWhatsapp },
+  { name: "Mail", label: "Email", component: Mail },
+];
 
 const SocialLinksManager = () => {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -204,17 +217,28 @@ const SocialLinksManager = () => {
               />
             </div>
             <div>
-              <Label htmlFor="icon">Icono (Lucide/React Icons)</Label>
-              <Input
-                id="icon"
+              <Label htmlFor="icon">Red Social</Label>
+              <Select
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="Linkedin, Instagram, FaTiktok, etc."
-                required
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Usa nombres de Lucide (ej: Linkedin, Instagram) o React Icons (ej: FaTiktok)
-              </p>
+                onValueChange={(value) => setFormData({ ...formData, icon: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una red social" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SOCIAL_ICONS.map((icon) => {
+                    const IconComponent = icon.component;
+                    return (
+                      <SelectItem key={icon.name} value={icon.name}>
+                        <div className="flex items-center gap-2">
+                          <IconComponent className="h-4 w-4" />
+                          <span>{icon.label}</span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label htmlFor="order_index">Orden</Label>
