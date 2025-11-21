@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Code, Database, Globe, Server, Cloud, Cpu, Settings, Workflow } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -25,6 +26,17 @@ interface Service {
   icon: string;
   show_in_home: boolean;
 }
+
+const SERVICE_ICONS = [
+  { name: "Code", label: "Código", component: Code },
+  { name: "Database", label: "Base de datos", component: Database },
+  { name: "Globe", label: "Web", component: Globe },
+  { name: "Server", label: "Servidor", component: Server },
+  { name: "Cloud", label: "Nube", component: Cloud },
+  { name: "Cpu", label: "Procesador", component: Cpu },
+  { name: "Settings", label: "Configuración", component: Settings },
+  { name: "Workflow", label: "Flujo de trabajo", component: Workflow },
+];
 
 const ServicesManager = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -212,20 +224,35 @@ const ServicesManager = () => {
               />
             </div>
             <div>
-              <Label htmlFor="icon">Icono (nombre de lucide-react)</Label>
-              <Input
-                id="icon"
+              <Label htmlFor="icon">Icono</Label>
+              <Select
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="ej: Code, Database, Globe"
-                required
-              />
+                onValueChange={(value) => setFormData({ ...formData, icon: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un icono" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SERVICE_ICONS.map((icon) => {
+                    const IconComponent = icon.component;
+                    return (
+                      <SelectItem key={icon.name} value={icon.name}>
+                        <div className="flex items-center gap-2">
+                          <IconComponent className="h-4 w-4" />
+                          <span>{icon.label}</span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label>Imagen</Label>
               <ImageUpload
                 onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                 currentImageUrl={formData.image_url}
+                onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
               />
             </div>
             <div className="flex items-center space-x-2">

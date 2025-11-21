@@ -126,9 +126,9 @@ const About = () => {
                           </div>
                           <CardTitle className="text-lg">{value.title}</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-muted-foreground">{value.description}</p>
-                        </CardContent>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground line-clamp-3 break-words">{value.description}</p>
+                      </CardContent>
                       </Card>
                     );
                   })}
@@ -171,7 +171,7 @@ const About = () => {
                         <p className="text-sm text-primary font-medium">{member.role}</p>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-sm text-muted-foreground">{member.description}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-4 break-words">{member.description}</p>
                       </CardContent>
                     </Card>
                   ))}
