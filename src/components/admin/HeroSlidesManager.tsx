@@ -151,7 +151,10 @@ const HeroSlidesManager = () => {
           <h2 className="text-2xl font-bold">Slides del Hero</h2>
           <p className="text-muted-foreground">Gestiona las imágenes del carrusel principal</p>
         </div>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button onClick={() => {
+          resetForm();
+          setIsOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" />
           Agregar Slide
         </Button>

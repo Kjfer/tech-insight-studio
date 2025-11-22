@@ -164,7 +164,12 @@ const Portfolio = () => {
                         <div className="flex items-start justify-between mb-2">
                           <Badge variant="secondary">{template.category?.name}</Badge>
                           {template.price && (
-                            <span className="text-xl font-bold text-primary">S/. {template.price}</span>
+                            <div className="flex flex-col items-end">
+                              {template.price_usd && (
+                                <span className="text-xs text-muted-foreground">${template.price_usd} USD</span>
+                              )}
+                              <span className="text-xl font-bold text-primary">S/. {template.price}</span>
+                            </div>
                           )}
                         </div>
                         <CardTitle className="text-xl">{template.title}</CardTitle>
@@ -267,7 +272,12 @@ const Portfolio = () => {
                             </div>
                             <Badge variant="secondary">{selectedTemplate.category?.name}</Badge>
                             {selectedTemplate.price && (
-                              <span className="ml-auto text-2xl font-bold text-primary">${selectedTemplate.price}</span>
+                              <div className="ml-auto flex flex-col items-end">
+                                {selectedTemplate.price_usd && (
+                                  <span className="text-lg text-muted-foreground">${selectedTemplate.price_usd} USD</span>
+                                )}
+                                <span className="text-2xl font-bold text-primary">S/ {selectedTemplate.price}</span>
+                              </div>
                             )}
                           </>
                         );
@@ -292,7 +302,20 @@ const Portfolio = () => {
                       </ul>
                     </div>
 
-                    {selectedTemplate.image_url && (
+                    {selectedTemplate.video_url ? (
+                      <div className="w-full aspect-video rounded-lg overflow-hidden border border-border bg-muted/20">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={selectedTemplate.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                          title={selectedTemplate.title}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="w-full h-full"
+                        />
+                      </div>
+                    ) : selectedTemplate.image_url ? (
                       <div className="w-full rounded-lg overflow-hidden border border-border bg-muted/20">
                         <img 
                           src={selectedTemplate.image_url} 
@@ -306,7 +329,7 @@ const Portfolio = () => {
                           }}
                         />
                       </div>
-                    )}
+                    ) : null}
 
                     {paymentMethods.length > 0 && (
                       <div className="border-t border-border pt-6">
