@@ -260,8 +260,15 @@ const TemplatesManager = () => {
               <div className="flex-1">
                 <h3 className="font-semibold">{template.title}</h3>
                 <p className="text-sm text-muted-foreground line-clamp-2">{template.description}</p>
-                {template.price && (
-                  <p className="text-sm font-medium mt-1">${template.price}</p>
+                {(template.price || template.price_usd) && (
+                  <div className="flex items-center gap-3 mt-1">
+                    {template.price && (
+                      <p className="text-sm font-medium">S/. {template.price}</p>
+                    )}
+                    {template.price_usd && (
+                      <p className="text-sm font-medium">${template.price_usd} USD</p>
+                    )}
+                  </div>
                 )}
                 {template.is_featured && (
                   <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded mt-1 inline-block">

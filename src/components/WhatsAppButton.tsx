@@ -18,9 +18,9 @@ const WhatsAppButton = () => {
       </span>
       <Button
         size="lg"
-        className="rounded-full w-16 h-16 shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white"
+        className="rounded-full w-20 h-20 shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white"
       >
-        <FaWhatsapp size={40} />
+        <FaWhatsapp size={52} />
       </Button>
     </a>
   );
