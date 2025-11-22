@@ -102,14 +102,13 @@ const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: Image
     // Convert Google Drive links to direct image URLs
     let finalUrl = imageLink;
     if (imageLink.includes('drive.google.com')) {
-      const fileIdMatch = imageLink.match(/\/d\/([^\/]+)/);
+      const fileIdMatch = imageLink.match(/\/d\/([^\/]+)/) || imageLink.match(/id=([^&]+)/);
       if (fileIdMatch) {
-        finalUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+        finalUrl = `https://drive.google.com/thumbnail?id=${fileIdMatch[1]}&sz=w1000`;
       }
     }
 
     onImageUploaded(finalUrl);
-    setImageLink("");
     toast({
       title: "Link agregado",
       description: "El link de la imagen se ha agregado correctamente",

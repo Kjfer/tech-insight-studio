@@ -172,8 +172,8 @@ const Portfolio = () => {
                             </div>
                           )}
                         </div>
-                        <CardTitle className="text-xl">{template.title}</CardTitle>
-                        <CardDescription>{template.description}</CardDescription>
+                        <CardTitle className="text-xl line-clamp-2">{template.title}</CardTitle>
+                        <CardDescription className="line-clamp-3">{template.description}</CardDescription>
                       </CardHeader>
                       
                       <CardContent>

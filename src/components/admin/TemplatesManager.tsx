@@ -305,9 +305,17 @@ const TemplatesManager = () => {
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) => {
+                  if (e.target.value.length <= 200) {
+                    setFormData({ ...formData, description: e.target.value });
+                  }
+                }}
                 required
+                maxLength={200}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                {formData.description.length}/200 caracteres
+              </p>
             </div>
             <div>
               <Label htmlFor="category">Categoría</Label>
