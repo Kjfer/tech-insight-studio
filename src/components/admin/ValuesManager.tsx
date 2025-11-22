@@ -154,7 +154,10 @@ const ValuesManager = () => {
           <h2 className="text-2xl font-bold">Valores</h2>
           <p className="text-muted-foreground">Valores corporativos</p>
         </div>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button onClick={() => {
+          resetForm();
+          setIsOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" />
           Agregar Valor
         </Button>

@@ -158,7 +158,10 @@ const SocialLinksManager = () => {
           <h2 className="text-2xl font-bold">Enlaces de Redes Sociales</h2>
           <p className="text-muted-foreground">Gestiona los enlaces de redes sociales</p>
         </div>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button onClick={() => {
+          resetForm();
+          setIsOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" />
           Agregar Enlace
         </Button>

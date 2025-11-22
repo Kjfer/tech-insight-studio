@@ -25,6 +25,8 @@ interface Template {
   image_url: string | null;
   category_id: string | null;
   price: number | null;
+  price_usd: number | null;
+  video_url: string | null;
   is_featured: boolean;
 }
 
@@ -46,6 +48,8 @@ const TemplatesManager = () => {
     image_url: "",
     category_id: "",
     price: "",
+    price_usd: "",
+    video_url: "",
     is_featured: false,
   });
   const { toast } = useToast();
@@ -97,7 +101,9 @@ const TemplatesManager = () => {
     const dataToSubmit = {
       ...formData,
       price: formData.price ? parseFloat(formData.price) : null,
+      price_usd: formData.price_usd ? parseFloat(formData.price_usd) : null,
       category_id: formData.category_id || null,
+      video_url: formData.video_url || null,
     };
 
     if (editingId) {
@@ -173,6 +179,8 @@ const TemplatesManager = () => {
       image_url: template.image_url || "",
       category_id: template.category_id || "",
       price: template.price?.toString() || "",
+      price_usd: template.price_usd?.toString() || "",
+      video_url: template.video_url || "",
       is_featured: template.is_featured,
     });
     
@@ -213,6 +221,8 @@ const TemplatesManager = () => {
       image_url: "",
       category_id: "",
       price: "",
+      price_usd: "",
+      video_url: "",
       is_featured: false,
     });
     setSelectedKeywords([]);
@@ -234,7 +244,10 @@ const TemplatesManager = () => {
           <h2 className="text-2xl font-bold">Plantillas</h2>
           <p className="text-muted-foreground">Gestiona las plantillas disponibles</p>
         </div>
-        <Button onClick={() => setIsOpen(true)}>
+        <Button onClick={() => {
+          resetForm();
+          setIsOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" />
           Agregar Plantilla
         </Button>
@@ -314,15 +327,27 @@ const TemplatesManager = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="price">Precio (Soles)</Label>
-              <Input
-                id="price"
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="price">Precio (Soles)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  step="0.01"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="price_usd">Precio (USD)</Label>
+                <Input
+                  id="price_usd"
+                  type="number"
+                  step="0.01"
+                  value={formData.price_usd}
+                  onChange={(e) => setFormData({ ...formData, price_usd: e.target.value })}
+                />
+              </div>
             </div>
             <div>
               <Label>Imagen</Label>
@@ -330,6 +355,19 @@ const TemplatesManager = () => {
                 currentImageUrl={formData.image_url}
                 onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
               />
+            </div>
+            <div>
+              <Label htmlFor="video_url">Video de YouTube (opcional)</Label>
+              <Input
+                id="video_url"
+                type="url"
+                placeholder="https://www.youtube.com/watch?v=..."
+                value={formData.video_url}
+                onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Si agregas un video, se mostrará en lugar de la imagen en la vista detallada
+              </p>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox

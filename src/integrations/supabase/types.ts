@@ -338,8 +338,10 @@ export type Database = {
           image_url: string | null
           is_featured: boolean | null
           price: number | null
+          price_usd: number | null
           title: string
           updated_at: string | null
+          video_url: string | null
         }
         Insert: {
           category_id?: string | null
@@ -349,8 +351,10 @@ export type Database = {
           image_url?: string | null
           is_featured?: boolean | null
           price?: number | null
+          price_usd?: number | null
           title: string
           updated_at?: string | null
+          video_url?: string | null
         }
         Update: {
           category_id?: string | null
@@ -360,8 +364,10 @@ export type Database = {
           image_url?: string | null
           is_featured?: boolean | null
           price?: number | null
+          price_usd?: number | null
           title?: string
           updated_at?: string | null
+          video_url?: string | null
         }
         Relationships: [
           {

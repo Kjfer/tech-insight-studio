@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, Link as LinkIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ImageUploadProps {
   currentImageUrl?: string;
@@ -15,6 +16,7 @@ interface ImageUploadProps {
 const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [imageLink, setImageLink] = useState("");
   const { toast } = useToast();
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,6 +89,33 @@ const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: Image
     }
   };
 
+  const handleLinkSubmit = () => {
+    if (!imageLink.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa un link válido",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Convert Google Drive links to direct image URLs
+    let finalUrl = imageLink;
+    if (imageLink.includes('drive.google.com')) {
+      const fileIdMatch = imageLink.match(/\/d\/([^\/]+)/);
+      if (fileIdMatch) {
+        finalUrl = `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`;
+      }
+    }
+
+    onImageUploaded(finalUrl);
+    setImageLink("");
+    toast({
+      title: "Link agregado",
+      description: "El link de la imagen se ha agregado correctamente",
+    });
+  };
+
   return (
     <div className="space-y-2">
       <Label htmlFor="image">Imagen</Label>
@@ -109,16 +138,45 @@ const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: Image
           </Button>
         </div>
       )}
-      <div className="flex gap-2">
-        <Input
-          id="image"
-          type="file"
-          accept="image/*"
-          onChange={handleFileUpload}
-          disabled={uploading}
-        />
-        {uploading && <Loader2 className="h-4 w-4 animate-spin" />}
-      </div>
+      <Tabs defaultValue="upload" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="upload">
+            <Upload className="h-4 w-4 mr-2" />
+            Subir Archivo
+          </TabsTrigger>
+          <TabsTrigger value="link">
+            <LinkIcon className="h-4 w-4 mr-2" />
+            Link de Drive
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="upload" className="space-y-2">
+          <div className="flex gap-2">
+            <Input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              disabled={uploading}
+            />
+            {uploading && <Loader2 className="h-4 w-4 animate-spin" />}
+          </div>
+        </TabsContent>
+        <TabsContent value="link" className="space-y-2">
+          <div className="flex gap-2">
+            <Input
+              placeholder="https://drive.google.com/file/d/..."
+              value={imageLink}
+              onChange={(e) => setImageLink(e.target.value)}
+            />
+            <Button type="button" onClick={handleLinkSubmit}>
+              Agregar
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Pega el link de Google Drive de una imagen compartida públicamente
+          </p>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
