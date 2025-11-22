@@ -53,10 +53,10 @@ const ServicesPreview = () => {
                   </div>
                 </div>
                 <CardHeader>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <CardTitle className="text-xl line-clamp-2">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>{service.description}</CardDescription>
+                  <CardDescription className="line-clamp-3">{service.description}</CardDescription>
                 </CardContent>
               </Card>
             );

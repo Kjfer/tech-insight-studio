@@ -1,5 +1,5 @@
-import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppButton = () => {
   const phoneNumber = "51987597973";
@@ -20,7 +20,7 @@ const WhatsAppButton = () => {
         size="lg"
         className="rounded-full w-16 h-16 shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white"
       >
-        <MessageCircle size={28} />
+        <FaWhatsapp size={32} />
       </Button>
     </a>
   );

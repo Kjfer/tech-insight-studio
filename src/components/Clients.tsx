@@ -61,15 +61,14 @@ const Clients = () => {
             {duplicatedClients.map((client, index) => (
               <div
                 key={`${client.id}-${index}`}
-                className="flex-shrink-0 w-32 h-24 flex items-center justify-center group cursor-pointer"
+                className="flex-shrink-0 flex items-center justify-center"
+                style={{ width: '200px', height: '120px' }}
               >
-                <div className="w-full h-full flex items-center justify-center rounded-xl bg-background border-2 border-border transition-smooth group-hover:border-primary group-hover:shadow-elegant overflow-hidden">
-                  <img 
-                    src={client.logo_url} 
-                    alt={client.name}
-                    className="w-full h-full object-contain p-4"
-                  />
-                </div>
+                <img 
+                  src={client.logo_url} 
+                  alt={client.name}
+                  className="max-w-full max-h-full object-contain transition-smooth hover:scale-110"
+                />
               </div>
             ))}
           </div>

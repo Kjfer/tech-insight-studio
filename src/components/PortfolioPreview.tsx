@@ -93,10 +93,10 @@ const PortfolioPreview = () => {
                       <Icon className={`w-8 h-8 ${color}`} />
                     </div>
                   )}
-                  <CardTitle className="text-2xl">{template.title}</CardTitle>
+                  <CardTitle className="text-2xl line-clamp-2">{template.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base line-clamp-3">{template.description}</CardDescription>
+                  <CardDescription className="text-base line-clamp-3 mb-3">{template.description}</CardDescription>
                   {template.keywords && template.keywords.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {template.keywords.slice(0, 3).map((kw: any) => (

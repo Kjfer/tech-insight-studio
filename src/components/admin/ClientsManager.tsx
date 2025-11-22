@@ -157,6 +157,9 @@ const ClientsManager = () => {
             </div>
             <div>
               <Label>Logo</Label>
+              <p className="text-sm text-muted-foreground mb-2">
+                Tamaño recomendado: 200x120 píxeles (máximo 300KB)
+              </p>
               <ImageUpload
                 currentImageUrl={formData.logo_url}
                 onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
