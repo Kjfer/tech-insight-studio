@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   const services = [
-    "Asesoría Tecnológica",
+    "Servicios de Business Intelligence",
     "Plantillas Excel",
     "Plantillas Python",
     "Plantillas Power BI",
