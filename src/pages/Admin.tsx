@@ -16,7 +16,8 @@ import {
   Users, 
   Building2,
   Share2,
-  CreditCard
+  CreditCard,
+  MessageSquareQuote
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlidesManager from "@/components/admin/HeroSlidesManager";
@@ -30,6 +31,7 @@ import TeamManager from "@/components/admin/TeamManager";
 import ClientsManager from "@/components/admin/ClientsManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import { PaymentMethodsManager } from "@/components/admin/PaymentMethodsManager";
+import TestimonialsManager from "@/components/admin/TestimonialsManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -114,6 +116,7 @@ const Admin = () => {
         { value: "values", label: "Valores", icon: Heart, description: "Valores corporativos" },
         { value: "team", label: "Equipo", icon: Users, description: "Miembros del equipo" },
         { value: "clients", label: "Clientes", icon: Building2, description: "Logos de clientes" },
+        { value: "testimonials", label: "Testimonios", icon: MessageSquareQuote, description: "Testimonios de clientes" },
       ]
     }
   ];
@@ -202,6 +205,10 @@ const Admin = () => {
 
             <TabsContent value="payment">
               <PaymentMethodsManager />
+            </TabsContent>
+
+            <TabsContent value="testimonials">
+              <TestimonialsManager />
             </TabsContent>
           </div>
         </Tabs>

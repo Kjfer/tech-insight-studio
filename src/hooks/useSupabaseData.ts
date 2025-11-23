@@ -244,3 +244,26 @@ export function usePaymentMethods() {
   return { paymentMethods, loading };
 }
 
+export function useTestimonials() {
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .order("order_index");
+      
+      if (!error && data) {
+        setTestimonials(data);
+      }
+      setLoading(false);
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  return { testimonials, loading };
+}
+

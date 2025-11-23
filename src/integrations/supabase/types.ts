@@ -379,6 +379,45 @@ export type Database = {
           },
         ]
       }
+      testimonials: {
+        Row: {
+          company: string | null
+          content: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          name: string
+          order_index: number
+          rating: number | null
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          company?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          order_index?: number
+          rating?: number | null
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          company?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          order_index?: number
+          rating?: number | null
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
