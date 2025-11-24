@@ -56,7 +56,7 @@ const ServicesPreview = () => {
                   <CardTitle className="text-xl line-clamp-2">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="line-clamp-3">{service.description}</CardDescription>
+                  <CardDescription className="line-clamp-3 break-words whitespace-normal">{service.description}</CardDescription>
                 </CardContent>
               </Card>
             );
