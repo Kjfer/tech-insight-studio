@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useBIHero, useBIFeatures, useBIVideo, useBIFAQs } from "@/hooks/useSupabaseData";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -13,15 +14,18 @@ const BusinessIntelligence = () => {
   const { features, loading: featuresLoading } = useBIFeatures();
   const { video, loading: videoLoading } = useBIVideo();
   const { faqs, loading: faqsLoading } = useBIFAQs();
+  
+  const [selectedFeature, setSelectedFeature] = useState<number>(0);
 
-  // Group features by category
-  const groupedFeatures = features.reduce((acc: any, feature: any) => {
-    if (!acc[feature.category]) {
-      acc[feature.category] = [];
+  // Convert YouTube URL to embed format
+  const getEmbedUrl = (url: string) => {
+    if (!url) return "";
+    const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    if (videoIdMatch && videoIdMatch[1]) {
+      return `https://www.youtube.com/embed/${videoIdMatch[1]}`;
     }
-    acc[feature.category].push(feature);
-    return acc;
-  }, {});
+    return url;
+  };
 
   return (
     <div className="min-h-screen">
@@ -62,47 +66,56 @@ const BusinessIntelligence = () => {
                   Características de la <span className="text-primary">Plataforma</span>
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Una plataforma completa de Business Intelligence con todas las herramientas que necesitas
+                  Selecciona una característica para conocer más detalles
                 </p>
               </div>
 
-              <div className="space-y-16">
-                {Object.entries(groupedFeatures).map(([category, categoryFeatures]: [string, any]) => (
-                  <div key={category}>
-                    <h3 className="text-2xl font-bold mb-8 text-center">
-                      <span className="gradient-text">{category}</span>
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {categoryFeatures.map((feature: any) => (
-                        <Card key={feature.id} className="hover-lift group overflow-hidden">
-                          <div className="relative h-48 overflow-hidden">
-                            <img 
-                              src={feature.image_url} 
-                              alt={feature.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-                          </div>
-                          <CardHeader>
-                            <CardTitle className="text-xl break-words">{feature.title}</CardTitle>
-                            <CardDescription className="text-base break-words whitespace-normal line-clamp-4">
-                              {feature.description}
-                            </CardDescription>
-                          </CardHeader>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="max-w-5xl mx-auto">
+                {/* Feature Buttons */}
+                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                  {features.map((feature: any, index: number) => (
+                    <Button
+                      key={feature.id}
+                      variant={selectedFeature === index ? "default" : "outline"}
+                      size="lg"
+                      onClick={() => setSelectedFeature(index)}
+                      className="text-sm sm:text-base"
+                    >
+                      {feature.title}
+                    </Button>
+                  ))}
+                </div>
 
-              <div className="text-center mt-12">
-                <Link to="/contacto">
-                  <Button size="lg" variant="outline" className="gap-2">
-                    <MessageCircle size={20} />
-                    Solicita una Demo
-                  </Button>
-                </Link>
+                {/* Selected Feature Display */}
+                {features[selectedFeature] && (
+                  <Card className="overflow-hidden">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="relative h-64 md:h-auto overflow-hidden">
+                        <img 
+                          src={features[selectedFeature].image_url} 
+                          alt={features[selectedFeature].title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="p-6 flex flex-col justify-center">
+                        <CardHeader className="p-0 mb-4">
+                          <CardTitle className="text-2xl mb-2">
+                            {features[selectedFeature].title}
+                          </CardTitle>
+                          <CardDescription className="text-base whitespace-normal">
+                            {features[selectedFeature].description}
+                          </CardDescription>
+                        </CardHeader>
+                        <Link to="/contacto">
+                          <Button size="lg" className="gap-2 w-full sm:w-auto">
+                            <MessageCircle size={20} />
+                            Contáctanos
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </Card>
+                )}
               </div>
             </div>
           </section>
@@ -124,7 +137,7 @@ const BusinessIntelligence = () => {
                 <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                   <iframe
                     className="absolute top-0 left-0 w-full h-full rounded-lg shadow-glow"
-                    src={video.video_url}
+                    src={getEmbedUrl(video.video_url)}
                     title={video.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
