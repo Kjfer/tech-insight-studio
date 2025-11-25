@@ -297,6 +297,7 @@ export type Database = {
           icon: string
           id: string
           image_url: string
+          redirect_link: string | null
           show_in_home: boolean | null
           title: string
           updated_at: string | null
@@ -307,6 +308,7 @@ export type Database = {
           icon: string
           id?: string
           image_url: string
+          redirect_link?: string | null
           show_in_home?: boolean | null
           title: string
           updated_at?: string | null
@@ -317,6 +319,7 @@ export type Database = {
           icon?: string
           id?: string
           image_url?: string
+          redirect_link?: string | null
           show_in_home?: boolean | null
           title?: string
           updated_at?: string | null

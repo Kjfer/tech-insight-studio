@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, FileSpreadsheet, Code, Lightbulb, LucideIcon } from "lucide-react";
+import { BarChart3, FileSpreadsheet, Code, Lightbulb, LucideIcon, ArrowRight } from "lucide-react";
 import { useServices } from "@/hooks/useSupabaseData";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -55,8 +55,16 @@ const ServicesPreview = () => {
                 <CardHeader>
                   <CardTitle className="text-xl line-clamp-2">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-3">
                   <CardDescription className="line-clamp-3 break-words whitespace-normal">{service.description}</CardDescription>
+                  {service.redirect_link && (
+                    <Link to={service.redirect_link}>
+                      <Button variant="outline" size="sm" className="w-full gap-2">
+                        Ver más
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             );

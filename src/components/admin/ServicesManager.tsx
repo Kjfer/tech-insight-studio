@@ -25,6 +25,7 @@ interface Service {
   image_url: string;
   icon: string;
   show_in_home: boolean;
+  redirect_link: string | null;
 }
 
 const SERVICE_ICONS = [
@@ -48,6 +49,7 @@ const ServicesManager = () => {
     image_url: "",
     icon: "",
     show_in_home: false,
+    redirect_link: null as string | null,
   });
   const { toast } = useToast();
 
@@ -122,6 +124,7 @@ const ServicesManager = () => {
       image_url: service.image_url,
       icon: service.icon,
       show_in_home: service.show_in_home,
+      redirect_link: service.redirect_link,
     });
     setIsOpen(true);
   };
@@ -153,6 +156,7 @@ const ServicesManager = () => {
       image_url: "",
       icon: "",
       show_in_home: false,
+      redirect_link: null,
     });
     setEditingId(null);
   };
@@ -257,6 +261,25 @@ const ServicesManager = () => {
                 currentImageUrl={formData.image_url}
                 onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
               />
+            </div>
+            <div>
+              <Label htmlFor="redirect_link">Enlace de Redirección</Label>
+              <Select
+                value={formData.redirect_link || "none"}
+                onValueChange={(value) => setFormData({ ...formData, redirect_link: value === "none" ? null : value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona una redirección" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Sin redirección</SelectItem>
+                  <SelectItem value="/portafolio">Portafolio</SelectItem>
+                  <SelectItem value="/business-intelligence">Business Intelligence</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Si seleccionas una redirección, se mostrará un botón "Ver más" en la card del servicio
+              </p>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
