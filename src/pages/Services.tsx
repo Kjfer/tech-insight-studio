@@ -1,5 +1,7 @@
-import { Code2, FileSpreadsheet, BarChart3, Lightbulb, LucideIcon } from "lucide-react";
+import { Code2, FileSpreadsheet, BarChart3, Lightbulb, LucideIcon, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -58,6 +60,16 @@ const Services = () => {
                         <CardTitle className="text-xl mb-2 break-words">{service.title}</CardTitle>
                         <CardDescription className="text-base line-clamp-3 break-words">{service.description}</CardDescription>
                       </CardHeader>
+                      {service.redirect_link && (
+                        <CardContent className="pt-0">
+                          <Link to={service.redirect_link}>
+                            <Button variant="outline" size="sm" className="w-full gap-2">
+                              Ver más
+                              <ArrowRight className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </CardContent>
+                      )}
                     </Card>
                   );
                 })}
