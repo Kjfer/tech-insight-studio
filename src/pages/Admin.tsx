@@ -17,7 +17,8 @@ import {
   Building2,
   Share2,
   CreditCard,
-  MessageSquareQuote
+  MessageSquareQuote,
+  BarChart3
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import HeroSlidesManager from "@/components/admin/HeroSlidesManager";
@@ -32,6 +33,7 @@ import ClientsManager from "@/components/admin/ClientsManager";
 import SocialLinksManager from "@/components/admin/SocialLinksManager";
 import { PaymentMethodsManager } from "@/components/admin/PaymentMethodsManager";
 import TestimonialsManager from "@/components/admin/TestimonialsManager";
+import BIManager from "@/components/admin/BIManager";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
@@ -98,6 +100,7 @@ const Admin = () => {
         { value: "hero", label: "Slides Hero", icon: Image, description: "Gestiona las imágenes del carrusel principal" },
         { value: "services", label: "Servicios", icon: Briefcase, description: "Administra los servicios ofrecidos" },
         { value: "templates", label: "Plantillas", icon: FileText, description: "Gestiona las plantillas disponibles" },
+        { value: "bi", label: "Business Intelligence", icon: BarChart3, description: "Página de Business Intelligence" },
       ]
     },
     {
@@ -209,6 +212,10 @@ const Admin = () => {
 
             <TabsContent value="testimonials">
               <TestimonialsManager />
+            </TabsContent>
+
+            <TabsContent value="bi">
+              <BIManager />
             </TabsContent>
           </div>
         </Tabs>

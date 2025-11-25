@@ -21,6 +21,7 @@ const Header = () => {
     { label: "Inicio", href: "/" },
     { label: "Servicios", href: "/servicios" },
     { label: "Portafolio", href: "/portafolio" },
+    { label: "Business Intelligence", href: "/business-intelligence" },
     { label: "Sobre Nosotros", href: "/nosotros" },
     { label: "Contacto", href: "/contacto" },
   ];
