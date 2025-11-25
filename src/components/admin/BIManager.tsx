@@ -98,6 +98,7 @@ const BIManager = () => {
   const handleEditFeature = (feature: any) => {
     setEditingItem(feature);
     setFeatureForm(feature);
+    setActiveTab("features");
     setOpenSheet(true);
   };
 
@@ -157,6 +158,7 @@ const BIManager = () => {
   const handleEditFAQ = (faq: any) => {
     setEditingItem(faq);
     setFaqForm(faq);
+    setActiveTab("faqs");
     setOpenSheet(true);
   };
 
@@ -226,9 +228,9 @@ const BIManager = () => {
               <h3 className="text-lg font-semibold">Características de la Plataforma</h3>
               <p className="text-sm text-muted-foreground">Total: {features.length}</p>
             </div>
-            <Sheet open={openSheet} onOpenChange={(open) => { setOpenSheet(open); if (!open) resetForms(); }}>
+            <Sheet open={openSheet && activeTab === "features"} onOpenChange={(open) => { setOpenSheet(open); if (!open) resetForms(); }}>
               <SheetTrigger asChild>
-                <Button onClick={() => setActiveTab("features")}>
+                <Button onClick={() => { resetForms(); setActiveTab("features"); }}>
                   <Plus className="mr-2 h-4 w-4" /> Agregar Característica
                 </Button>
               </SheetTrigger>
@@ -346,7 +348,7 @@ const BIManager = () => {
             </div>
             <Sheet open={openSheet && activeTab === "faqs"} onOpenChange={(open) => { setOpenSheet(open); if (!open) resetForms(); }}>
               <SheetTrigger asChild>
-                <Button onClick={() => setActiveTab("faqs")}>
+                <Button onClick={() => { resetForms(); setActiveTab("faqs"); }}>
                   <Plus className="mr-2 h-4 w-4" /> Agregar FAQ
                 </Button>
               </SheetTrigger>
