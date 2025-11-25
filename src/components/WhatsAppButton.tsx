@@ -20,7 +20,7 @@ const WhatsAppButton = () => {
         size="lg"
         className="rounded-full w-20 h-20 shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white"
       >
-        <FaWhatsapp size={64} />
+        <FaWhatsapp className="w-full h-full" aria-hidden="true" />
       </Button>
     </a>
   );
