@@ -55,7 +55,7 @@ const Testimonials = () => {
                       ))}
                     </div>
 
-                    <p className="text-muted-foreground italic flex-1">
+                    <p className="text-muted-foreground italic flex-1 break-words whitespace-normal line-clamp-6">
                       "{testimonial.content}"
                     </p>
                   </CardContent>
