@@ -267,3 +267,95 @@ export function useTestimonials() {
   return { testimonials, loading };
 }
 
+export function useBIHero() {
+  const [hero, setHero] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      const { data, error } = await supabase
+        .from("bi_hero")
+        .select("*")
+        .maybeSingle();
+      
+      if (!error && data) {
+        setHero(data);
+      }
+      setLoading(false);
+    };
+
+    fetchHero();
+  }, []);
+
+  return { hero, loading };
+}
+
+export function useBIFeatures() {
+  const [features, setFeatures] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatures = async () => {
+      const { data, error } = await supabase
+        .from("bi_features")
+        .select("*")
+        .order("order_index");
+      
+      if (!error && data) {
+        setFeatures(data);
+      }
+      setLoading(false);
+    };
+
+    fetchFeatures();
+  }, []);
+
+  return { features, loading };
+}
+
+export function useBIVideo() {
+  const [video, setVideo] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const { data, error } = await supabase
+        .from("bi_video")
+        .select("*")
+        .maybeSingle();
+      
+      if (!error && data) {
+        setVideo(data);
+      }
+      setLoading(false);
+    };
+
+    fetchVideo();
+  }, []);
+
+  return { video, loading };
+}
+
+export function useBIFAQs() {
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      const { data, error } = await supabase
+        .from("bi_faqs")
+        .select("*")
+        .order("order_index");
+      
+      if (!error && data) {
+        setFaqs(data);
+      }
+      setLoading(false);
+    };
+
+    fetchFAQs();
+  }, []);
+
+  return { faqs, loading };
+}
+
