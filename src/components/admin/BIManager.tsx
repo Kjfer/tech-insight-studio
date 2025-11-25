@@ -22,17 +22,9 @@ const BIManager = () => {
   const [editingItem, setEditingItem] = useState<any>(null);
 
   const [heroForm, setHeroForm] = useState({ title: "", description: "", image_url: "" });
-  const [featureForm, setFeatureForm] = useState({ category: "", title: "", description: "", image_url: "", order_index: 0 });
+  const [featureForm, setFeatureForm] = useState({ title: "", description: "", image_url: "", order_index: 0 });
   const [videoForm, setVideoForm] = useState({ video_url: "", title: "", description: "" });
   const [faqForm, setFaqForm] = useState({ question: "", answer: "", order_index: 0 });
-
-  const FEATURE_CATEGORIES = [
-    "Integración de datos",
-    "Big data",
-    "Servicios de procesamiento",
-    "Entrada de insights",
-    "Gobernanza y seguridad"
-  ];
 
   useEffect(() => {
     fetchAllData();
@@ -59,7 +51,7 @@ const BIManager = () => {
 
   const resetForms = () => {
     setEditingItem(null);
-    setFeatureForm({ category: "", title: "", description: "", image_url: "", order_index: 0 });
+    setFeatureForm({ title: "", description: "", image_url: "", order_index: 0 });
     setFaqForm({ question: "", answer: "", order_index: 0 });
   };
 
@@ -84,7 +76,7 @@ const BIManager = () => {
 
   // Features handlers
   const handleSaveFeature = async () => {
-    if (!featureForm.category || !featureForm.title || !featureForm.description || !featureForm.image_url) {
+    if (!featureForm.title || !featureForm.description || !featureForm.image_url) {
       toast({ title: "Error", description: "Completa todos los campos", variant: "destructive" });
       return;
     }
@@ -200,7 +192,7 @@ const BIManager = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Título</Label>
+                <Label>Título ({heroForm.title.length}/200)</Label>
                 <Input 
                   value={heroForm.title}
                   onChange={(e) => setHeroForm({ ...heroForm, title: e.target.value })}
@@ -208,17 +200,19 @@ const BIManager = () => {
                 />
               </div>
               <div>
-                <Label>Descripción</Label>
+                <Label>Descripción ({heroForm.description.length}/400)</Label>
                 <Textarea 
                   value={heroForm.description}
                   onChange={(e) => setHeroForm({ ...heroForm, description: e.target.value })}
                   maxLength={400}
+                  rows={4}
                 />
               </div>
               <ImageUpload
                 currentImageUrl={heroForm.image_url}
                 onImageUploaded={(url) => setHeroForm({ ...heroForm, image_url: url })}
                 onImageDeleted={() => setHeroForm({ ...heroForm, image_url: "" })}
+                recommendedSpecs="Recomendado: 1920x1080px, máx 2MB"
               />
               <Button onClick={handleSaveHero}>Guardar Hero</Button>
             </CardContent>
@@ -244,32 +238,20 @@ const BIManager = () => {
                 </SheetHeader>
                 <div className="space-y-4 mt-4">
                   <div>
-                    <Label>Categoría</Label>
-                    <select
-                      className="w-full rounded-md border border-input bg-background px-3 py-2"
-                      value={featureForm.category}
-                      onChange={(e) => setFeatureForm({ ...featureForm, category: e.target.value })}
-                    >
-                      <option value="">Seleccionar categoría</option>
-                      {FEATURE_CATEGORIES.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <Label>Título</Label>
+                    <Label>Título ({featureForm.title.length}/100)</Label>
                     <Input 
                       value={featureForm.title}
                       onChange={(e) => setFeatureForm({ ...featureForm, title: e.target.value })}
-                      maxLength={200}
+                      maxLength={100}
                     />
                   </div>
                   <div>
-                    <Label>Descripción</Label>
+                    <Label>Descripción ({featureForm.description.length}/300)</Label>
                     <Textarea 
                       value={featureForm.description}
                       onChange={(e) => setFeatureForm({ ...featureForm, description: e.target.value })}
-                      maxLength={400}
+                      maxLength={300}
+                      rows={4}
                     />
                   </div>
                   <div>
@@ -284,6 +266,7 @@ const BIManager = () => {
                     currentImageUrl={featureForm.image_url}
                     onImageUploaded={(url) => setFeatureForm({ ...featureForm, image_url: url })}
                     onImageDeleted={() => setFeatureForm({ ...featureForm, image_url: "" })}
+                    recommendedSpecs="Recomendado: 800x600px, máx 1MB"
                   />
                   <Button onClick={handleSaveFeature} className="w-full">Guardar</Button>
                 </div>
@@ -298,7 +281,7 @@ const BIManager = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <CardTitle className="text-base">{feature.title}</CardTitle>
-                      <CardDescription className="text-sm">{feature.category}</CardDescription>
+                      <CardDescription className="text-sm line-clamp-2">{feature.description}</CardDescription>
                     </div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" onClick={() => handleEditFeature(feature)}>
@@ -324,27 +307,29 @@ const BIManager = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>URL del Video (YouTube Embed)</Label>
+                <Label>URL del Video (YouTube)</Label>
                 <Input 
                   value={videoForm.video_url}
                   onChange={(e) => setVideoForm({ ...videoForm, video_url: e.target.value })}
-                  placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                  placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
                 />
+                <p className="text-xs text-muted-foreground mt-1">Acepta cualquier formato de URL de YouTube</p>
               </div>
               <div>
-                <Label>Título</Label>
+                <Label>Título ({videoForm.title.length}/100)</Label>
                 <Input 
                   value={videoForm.title}
                   onChange={(e) => setVideoForm({ ...videoForm, title: e.target.value })}
-                  maxLength={200}
+                  maxLength={100}
                 />
               </div>
               <div>
-                <Label>Descripción</Label>
+                <Label>Descripción ({videoForm.description.length}/300)</Label>
                 <Textarea 
                   value={videoForm.description}
                   onChange={(e) => setVideoForm({ ...videoForm, description: e.target.value })}
-                  maxLength={400}
+                  maxLength={300}
+                  rows={3}
                 />
               </div>
               <Button onClick={handleSaveVideo}>Guardar Video</Button>
@@ -371,19 +356,20 @@ const BIManager = () => {
                 </SheetHeader>
                 <div className="space-y-4 mt-4">
                   <div>
-                    <Label>Pregunta</Label>
+                    <Label>Pregunta ({faqForm.question.length}/200)</Label>
                     <Input 
                       value={faqForm.question}
                       onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
-                      maxLength={300}
+                      maxLength={200}
                     />
                   </div>
                   <div>
-                    <Label>Respuesta</Label>
+                    <Label>Respuesta ({faqForm.answer.length}/500)</Label>
                     <Textarea 
                       value={faqForm.answer}
                       onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
-                      maxLength={800}
+                      maxLength={500}
+                      rows={5}
                     />
                   </div>
                   <div>
