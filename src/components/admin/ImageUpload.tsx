@@ -11,9 +11,21 @@ interface ImageUploadProps {
   currentImageUrl?: string;
   onImageUploaded: (url: string) => void;
   onImageDeleted?: () => void;
+  recommendedSpecs?: string;
+  maxSizeMB?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
-const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: ImageUploadProps) => {
+const ImageUpload = ({ 
+  currentImageUrl, 
+  onImageUploaded, 
+  onImageDeleted,
+  recommendedSpecs = "Recomendado: 1200x800px, máx 1MB",
+  maxSizeMB = 2,
+  maxWidth = 2400,
+  maxHeight = 2400
+}: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [imageLink, setImageLink] = useState("");
@@ -23,37 +35,81 @@ const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: Image
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploading(true);
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('content-images')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from('content-images')
-        .getPublicUrl(filePath);
-
-      onImageUploaded(data.publicUrl);
-      
-      toast({
-        title: "Imagen subida",
-        description: "La imagen se ha subido correctamente",
-      });
-    } catch (error: any) {
+    // Validar tamaño del archivo
+    const fileSizeMB = file.size / (1024 * 1024);
+    if (fileSizeMB > maxSizeMB) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo subir la imagen",
+        description: `La imagen debe pesar menos de ${maxSizeMB}MB. Tamaño actual: ${fileSizeMB.toFixed(2)}MB`,
         variant: "destructive",
       });
-    } finally {
-      setUploading(false);
+      e.target.value = "";
+      return;
     }
+
+    // Validar dimensiones
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    
+    img.onload = async () => {
+      URL.revokeObjectURL(objectUrl);
+      
+      if (img.width > maxWidth || img.height > maxHeight) {
+        toast({
+          title: "Error",
+          description: `Dimensiones máximas: ${maxWidth}x${maxHeight}px. Imagen actual: ${img.width}x${img.height}px`,
+          variant: "destructive",
+        });
+        e.target.value = "";
+        return;
+      }
+
+      // Proceder con la subida
+      setUploading(true);
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('content-images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from('content-images')
+          .getPublicUrl(filePath);
+
+        onImageUploaded(data.publicUrl);
+        
+        toast({
+          title: "Imagen subida",
+          description: "La imagen se ha subido correctamente",
+        });
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: error.message || "No se pudo subir la imagen",
+          variant: "destructive",
+        });
+      } finally {
+        setUploading(false);
+        e.target.value = "";
+      }
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      toast({
+        title: "Error",
+        description: "No se pudo cargar la imagen",
+        variant: "destructive",
+      });
+      e.target.value = "";
+    };
+
+    img.src = objectUrl;
   };
 
   const handleDelete = async () => {
@@ -118,6 +174,7 @@ const ImageUpload = ({ currentImageUrl, onImageUploaded, onImageDeleted }: Image
   return (
     <div className="space-y-2">
       <Label htmlFor="image">Imagen</Label>
+      <p className="text-xs text-muted-foreground">{recommendedSpecs}</p>
       {currentImageUrl && (
         <div className="mb-2 relative">
           <img
