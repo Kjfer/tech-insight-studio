@@ -16,7 +16,7 @@ const WhatsAppButton = () => {
         className="rounded-full w-20 h-20 p-0 flex items-center justify-center shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white"
       >
         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp en nueva pestaña">
-          <FaWhatsapp className="w-12 h-12" aria-hidden="true" />
+          <FaWhatsapp size={56} aria-hidden="true" />
         </a>
       </Button>
     </div>
