@@ -97,7 +97,7 @@ const ContactPage = () => {
       icon: Phone,
       title: "Teléfono",
       content: "+51 987597973",
-      link: "tel:+51987597973",
+      link: "https://wa.me/51987597973?text=Hola!%20Me%20gustar%C3%ADa%20solicitar%20informaci%C3%B3n%20sobre%20sus%20servicios.",
     },
     {
       icon: MapPin,
