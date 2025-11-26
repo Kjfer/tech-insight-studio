@@ -5,14 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Plus, Star } from "lucide-react";
+import { Trash2, Plus, Star, Pencil } from "lucide-react";
 import ImageUpload from "./ImageUpload";
 
 const TestimonialsManager = () => {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [openSheet, setOpenSheet] = useState(false);
+  const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState({
     name: "",
     role: "",
@@ -40,14 +42,27 @@ const TestimonialsManager = () => {
     setLoading(false);
   };
 
+  const resetForm = () => {
+    setEditingItem(null);
+    setFormData({
+      name: "",
+      role: "",
+      company: "",
+      content: "",
+      image_url: "",
+      rating: 5,
+      order_index: testimonials.length,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (editingId) {
+    if (editingItem) {
       const { error } = await supabase
         .from("testimonials")
         .update(formData)
-        .eq("id", editingId);
+        .eq("id", editingItem.id);
       
       if (error) {
         toast({
@@ -82,12 +97,13 @@ const TestimonialsManager = () => {
       });
     }
     
+    setOpenSheet(false);
     resetForm();
     fetchTestimonials();
   };
 
   const handleEdit = (testimonial: any) => {
-    setEditingId(testimonial.id);
+    setEditingItem(testimonial);
     setFormData({
       name: testimonial.name,
       role: testimonial.role,
@@ -97,9 +113,12 @@ const TestimonialsManager = () => {
       rating: testimonial.rating || 5,
       order_index: testimonial.order_index,
     });
+    setOpenSheet(true);
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm("¿Estás seguro de eliminar este testimonio?")) return;
+    
     const { error } = await supabase
       .from("testimonials")
       .delete()
@@ -122,187 +141,170 @@ const TestimonialsManager = () => {
     fetchTestimonials();
   };
 
-  const resetForm = () => {
-    setEditingId(null);
-    setFormData({
-      name: "",
-      role: "",
-      company: "",
-      content: "",
-      image_url: "",
-      rating: 5,
-      order_index: testimonials.length,
-    });
-  };
-
   if (loading) {
     return <div>Cargando...</div>;
   }
 
   return (
-    <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {editingId ? "Editar Testimonio" : "Nuevo Testimonio"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="role">Cargo *</Label>
-                <Input
-                  id="role"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="company">Empresa</Label>
-                <Input
-                  id="company"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="rating">Calificación</Label>
-                <div className="flex items-center gap-2">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h3 className="text-lg font-semibold">Testimonios</h3>
+          <p className="text-sm text-muted-foreground">Total: {testimonials.length}</p>
+        </div>
+        <Sheet open={openSheet} onOpenChange={(open) => { setOpenSheet(open); if (!open) resetForm(); }}>
+          <SheetTrigger asChild>
+            <Button onClick={() => resetForm()}>
+              <Plus className="mr-2 h-4 w-4" /> Agregar Testimonio
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="overflow-y-auto">
+            <SheetHeader>
+              <SheetTitle>{editingItem ? "Editar" : "Agregar"} Testimonio</SheetTitle>
+            </SheetHeader>
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nombre * ({formData.name.length}/100)</Label>
                   <Input
-                    id="rating"
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={formData.rating}
-                    onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
-                    className="w-20"
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    maxLength={100}
+                    required
                   />
-                  <div className="flex gap-1">
-                    {Array.from({ length: formData.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                    ))}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="role">Cargo * ({formData.role.length}/100)</Label>
+                  <Input
+                    id="role"
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    maxLength={100}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="company">Empresa ({formData.company.length}/100)</Label>
+                  <Input
+                    id="company"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    maxLength={100}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="rating">Calificación</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="rating"
+                      type="number"
+                      min="1"
+                      max="5"
+                      value={formData.rating}
+                      onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
+                      className="w-20"
+                    />
+                    <div className="flex gap-1">
+                      {Array.from({ length: formData.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="order_index">Orden</Label>
+                  <Input
+                    id="order_index"
+                    type="number"
+                    value={formData.order_index}
+                    onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) })}
+                  />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="order_index">Orden</Label>
-                <Input
-                  id="order_index"
-                  type="number"
-                  value={formData.order_index}
-                  onChange={(e) => setFormData({ ...formData, order_index: parseInt(e.target.value) })}
+                <Label htmlFor="content">Testimonio * ({formData.content.length}/300)</Label>
+                <Textarea
+                  id="content"
+                  value={formData.content}
+                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                  required
+                  maxLength={300}
+                  rows={4}
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="content">Testimonio * (máx. 300 caracteres)</Label>
-              <Textarea
-                id="content"
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                required
-                maxLength={300}
-                rows={4}
-              />
-              <p className="text-xs text-muted-foreground">
-                {formData.content.length}/300 caracteres
-              </p>
-            </div>
+              <div className="space-y-2">
+                <Label>Imagen</Label>
+                <ImageUpload
+                  currentImageUrl={formData.image_url}
+                  onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                  onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
+                  recommendedSpecs="Recomendado: 200x200px, máx 500KB"
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label>Imagen</Label>
-              <ImageUpload
-                currentImageUrl={formData.image_url}
-                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-                onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <Button type="submit">
-                {editingId ? "Actualizar" : "Crear"}
+              <Button type="submit" className="w-full">
+                {editingItem ? "Actualizar" : "Crear"} Testimonio
               </Button>
-              {editingId && (
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  Cancelar
-                </Button>
-              )}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </form>
+          </SheetContent>
+        </Sheet>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Testimonios Existentes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {testimonials.map((testimonial) => (
-              <Card key={testimonial.id} className="border-muted">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-4 flex-1">
-                      {testimonial.image_url && (
-                        <img
-                          src={testimonial.image_url}
-                          alt={testimonial.name}
-                          className="w-16 h-16 rounded-full object-cover"
-                        />
-                      )}
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{testimonial.name}</h3>
-                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        {testimonial.company && (
-                          <p className="text-sm text-primary">{testimonial.company}</p>
-                        )}
-                        <div className="flex gap-1 my-2">
-                          {Array.from({ length: testimonial.rating || 5 }).map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                          ))}
-                        </div>
-                        <p className="text-sm italic mt-2 line-clamp-4 break-words">"{testimonial.content}"</p>
-                      </div>
+      <div className="grid gap-4">
+        {testimonials.map((testimonial) => (
+          <Card key={testimonial.id}>
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4 flex-1 min-w-0">
+                  {testimonial.image_url && (
+                    <img
+                      src={testimonial.image_url}
+                      alt={testimonial.name}
+                      className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{testimonial.name}</h3>
+                    <p className="text-sm text-muted-foreground truncate">{testimonial.role}</p>
+                    {testimonial.company && (
+                      <p className="text-sm text-primary truncate">{testimonial.company}</p>
+                    )}
+                    <div className="flex gap-1 my-2">
+                      {Array.from({ length: testimonial.rating || 5 }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(testimonial)}
-                      >
-                        Editar
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(testimonial.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <p className="text-sm italic line-clamp-3 break-words">"{testimonial.content}"</p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEdit(testimonial)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDelete(testimonial.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
