@@ -5,7 +5,7 @@ import logo from "@/assets/logo.png";
 import { useSocialLinks } from "@/hooks/useSupabaseData";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2026;
   const { socialLinks, loading } = useSocialLinks();
 
   const quickLinks = [

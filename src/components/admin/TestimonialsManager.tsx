@@ -277,7 +277,7 @@ const TestimonialsManager = () => {
                             <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                           ))}
                         </div>
-                        <p className="text-sm italic mt-2">"{testimonial.content}"</p>
+                        <p className="text-sm italic mt-2 line-clamp-4 break-words">"{testimonial.content}"</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
