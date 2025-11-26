@@ -13,10 +13,10 @@ const WhatsAppButton = () => {
       </span>
       <Button
         asChild
-        className="rounded-full w-20 h-20 p-0 flex items-center justify-center shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white animate-[pulse-scale_2s_ease-in-out_infinite] hover:animate-none"
+        className="rounded-full w-20 h-20 p-0 flex items-center justify-center shadow-glow bg-[#25D366] hover:bg-[#20BA5A] text-white animate-[pulse-scale_2s_ease-in-out_infinite] hover:animate-none [&_svg]:size-14"
       >
         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp en nueva pestaña">
-          <FaWhatsapp size={56} aria-hidden="true" />
+          <FaWhatsapp aria-hidden="true" />
         </a>
       </Button>
     </div>
