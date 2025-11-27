@@ -188,25 +188,27 @@ const TeamManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="name">Nombre</Label>
+              <Label htmlFor="name">Nombre ({formData.name.length}/100)</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="role">Cargo</Label>
+              <Label htmlFor="role">Cargo ({formData.role.length}/100)</Label>
               <Input
                 id="role"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="description">Descripción</Label>
+              <Label htmlFor="description">Descripción ({formData.description.length}/400)</Label>
               <Textarea
                 id="description"
                 value={formData.description}
@@ -214,7 +216,6 @@ const TeamManager = () => {
                 required
                 maxLength={400}
               />
-              <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
             </div>
             <div>
               <Label>Imagen</Label>

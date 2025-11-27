@@ -199,23 +199,25 @@ const SocialLinksManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="platform">Plataforma</Label>
+              <Label htmlFor="platform">Plataforma ({formData.platform.length}/50)</Label>
               <Input
                 id="platform"
                 value={formData.platform}
                 onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
                 placeholder="LinkedIn, Instagram, TikTok, etc."
+                maxLength={50}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="url">URL</Label>
+              <Label htmlFor="url">URL ({formData.url.length}/200)</Label>
               <Input
                 id="url"
                 type="url"
                 value={formData.url}
                 onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                 placeholder="https://..."
+                maxLength={200}
                 required
               />
             </div>

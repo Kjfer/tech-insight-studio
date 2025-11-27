@@ -192,29 +192,32 @@ const HeroSlidesManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="title">Título</Label>
+              <Label htmlFor="title">Título ({formData.title.length}/150)</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                maxLength={150}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="highlight">Texto Destacado</Label>
+              <Label htmlFor="highlight">Texto Destacado ({formData.highlight.length}/100)</Label>
               <Input
                 id="highlight"
                 value={formData.highlight}
                 onChange={(e) => setFormData({ ...formData, highlight: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="description">Descripción</Label>
+              <Label htmlFor="description">Descripción ({formData.description.length}/300)</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                maxLength={300}
                 required
               />
             </div>

@@ -299,30 +299,25 @@ const TemplatesManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="title">Título</Label>
+              <Label htmlFor="title">Título ({formData.title.length}/100)</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="description">Descripción</Label>
+              <Label htmlFor="description">Descripción ({formData.description.length}/300)</Label>
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => {
-                  if (e.target.value.length <= 200) {
-                    setFormData({ ...formData, description: e.target.value });
-                  }
-                }}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                maxLength={300}
                 required
-                maxLength={200}
+                rows={4}
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                {formData.description.length}/200 caracteres
-              </p>
             </div>
             <div>
               <Label htmlFor="category">Categoría</Label>
