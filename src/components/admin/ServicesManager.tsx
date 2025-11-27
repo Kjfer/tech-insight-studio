@@ -257,8 +257,8 @@ const ServicesManager = () => {
             <div>
               <Label>Imagen</Label>
               <ImageUpload
-                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                 currentImageUrl={formData.image_url}
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                 onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
               />
             </div>

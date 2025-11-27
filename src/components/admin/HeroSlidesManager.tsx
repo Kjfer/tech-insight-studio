@@ -233,6 +233,7 @@ const HeroSlidesManager = () => {
               <ImageUpload
                 onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
                 currentImageUrl={formData.image_url}
+                onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
               />
             </div>
             <div className="flex gap-2 pt-4">
