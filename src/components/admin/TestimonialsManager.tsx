@@ -260,46 +260,46 @@ const TestimonialsManager = () => {
       <div className="grid gap-4">
         {testimonials.map((testimonial) => (
           <Card key={testimonial.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1 min-w-0">
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
                   {testimonial.image_url && (
                     <img
                       src={testimonial.image_url}
                       alt={testimonial.name}
-                      className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+                      className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                     />
                   )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{testimonial.name}</h3>
-                    <p className="text-sm text-muted-foreground truncate">{testimonial.role}</p>
+                  <div>
+                    <h3 className="font-semibold">{testimonial.name}</h3>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                     {testimonial.company && (
-                      <p className="text-sm text-primary truncate">{testimonial.company}</p>
+                      <p className="text-sm text-primary">{testimonial.company}</p>
                     )}
-                    <div className="flex gap-1 my-2">
-                      {Array.from({ length: testimonial.rating || 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                      ))}
-                    </div>
-                    <p className="text-sm italic line-clamp-3 break-words">"{testimonial.content}"</p>
                   </div>
                 </div>
-                <div className="flex gap-2 flex-shrink-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(testimonial)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(testimonial.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                <div className="flex gap-1 mb-2">
+                  {Array.from({ length: testimonial.rating || 5 }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                  ))}
                 </div>
+                <p className="text-sm text-muted-foreground line-clamp-2 italic">"{testimonial.content}"</p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleEdit(testimonial)}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleDelete(testimonial.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </div>
             </CardContent>
           </Card>
