@@ -84,7 +84,7 @@ const AboutUsManager = () => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="mission">Misión</Label>
+            <Label htmlFor="mission">Misión ({aboutData.mission.length}/400)</Label>
             <Textarea
               id="mission"
               value={aboutData.mission}
@@ -93,10 +93,9 @@ const AboutUsManager = () => {
               rows={4}
               maxLength={400}
             />
-            <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
           </div>
           <div>
-            <Label htmlFor="vision">Visión</Label>
+            <Label htmlFor="vision">Visión ({aboutData.vision.length}/400)</Label>
             <Textarea
               id="vision"
               value={aboutData.vision}
@@ -105,10 +104,9 @@ const AboutUsManager = () => {
               rows={4}
               maxLength={400}
             />
-            <p className="text-xs text-muted-foreground mt-1">Máximo 400 caracteres.</p>
           </div>
           <div>
-            <Label htmlFor="history">Nuestra Historia</Label>
+            <Label htmlFor="history">Nuestra Historia ({aboutData.history.length}/800)</Label>
             <Textarea
               id="history"
               value={aboutData.history}
@@ -117,7 +115,6 @@ const AboutUsManager = () => {
               rows={6}
               maxLength={800}
             />
-            <p className="text-xs text-muted-foreground mt-1">Máximo 800 caracteres.</p>
           </div>
           <Button type="submit">Guardar Cambios</Button>
         </form>

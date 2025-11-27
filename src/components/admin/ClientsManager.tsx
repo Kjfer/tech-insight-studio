@@ -150,11 +150,12 @@ const ClientsManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="name">Nombre del Cliente</Label>
+              <Label htmlFor="name">Nombre del Cliente ({formData.name.length}/100)</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>

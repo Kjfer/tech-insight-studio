@@ -213,21 +213,24 @@ const ServicesManager = () => {
           </SheetHeader>
           <form onSubmit={handleSubmit} className="space-y-4 mt-6">
             <div>
-              <Label htmlFor="title">Título</Label>
+              <Label htmlFor="title">Título ({formData.title.length}/100)</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                maxLength={100}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="description">Descripción</Label>
+              <Label htmlFor="description">Descripción ({formData.description.length}/300)</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                maxLength={300}
                 required
+                rows={4}
               />
             </div>
             <div>

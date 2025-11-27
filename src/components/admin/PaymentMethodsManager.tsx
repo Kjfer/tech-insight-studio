@@ -153,32 +153,35 @@ export const PaymentMethodsManager = () => {
             </SheetHeader>
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <div>
-                <Label htmlFor="name">Nombre</Label>
+                <Label htmlFor="name">Nombre ({formData.name.length}/100)</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ej: Cuenta BCP"
+                  maxLength={100}
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description">Descripción ({formData.description.length}/200)</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Descripción del método"
+                  maxLength={200}
                   required
                 />
               </div>
               <div>
-                <Label htmlFor="account_info">Información de Cuenta</Label>
+                <Label htmlFor="account_info">Información de Cuenta ({formData.account_info.length}/300)</Label>
                 <Textarea
                   id="account_info"
                   value={formData.account_info}
                   onChange={(e) => setFormData({ ...formData, account_info: e.target.value })}
                   placeholder="Ej: Cuenta: 123-456-789 | Titular: Juan Pérez"
+                  maxLength={300}
                   required
                 />
               </div>
