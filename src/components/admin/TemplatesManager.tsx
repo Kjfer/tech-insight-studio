@@ -369,6 +369,7 @@ const TemplatesManager = () => {
               <ImageUpload
                 currentImageUrl={formData.image_url}
                 onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                onImageDeleted={() => setFormData({ ...formData, image_url: "" })}
               />
             </div>
             <div>

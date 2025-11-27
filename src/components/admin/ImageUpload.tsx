@@ -128,6 +128,7 @@ const ImageUpload = ({
 
       if (error) throw error;
 
+      setImageLink(""); // Clear the link input field
       onImageDeleted?.();
       
       toast({
@@ -165,6 +166,7 @@ const ImageUpload = ({
     }
 
     onImageUploaded(finalUrl);
+    setImageLink(""); // Clear the input after successful upload
     toast({
       title: "Link agregado",
       description: "El link de la imagen se ha agregado correctamente",
@@ -178,7 +180,7 @@ const ImageUpload = ({
       {currentImageUrl && (
         <div className="mb-2 relative">
           <img
-            src={currentImageUrl}
+            src={`${currentImageUrl}?t=${Date.now()}`}
             alt="Preview"
             className="h-32 w-auto object-cover rounded"
           />
