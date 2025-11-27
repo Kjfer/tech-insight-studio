@@ -51,15 +51,15 @@ const Hero = () => {
                 </div>
 
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                  <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 animate-fade-in leading-tight">
+                  <div className="max-w-4xl mx-auto text-center px-4">
+                    <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 animate-fade-in leading-tight whitespace-pre-wrap">
                       {slide.title}{" "}
                       <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                         {slide.highlight}
                       </span>
                     </h1>
 
-                    <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                    <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in whitespace-pre-wrap leading-relaxed" style={{ animationDelay: "0.2s" }}>
                       {slide.description}
                     </p>
                   </div>
